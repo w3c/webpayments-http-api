@@ -1,68 +1,67 @@
-<!DOCTYPE html> 
-<html> 
-  <head> 
-    <title>Web Commerce 1.0</title> 
-    <meta http-equiv='Content-Type' content='text/html;charset=utf-8'/> 
-    <!-- 
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web Payments HTTP API 1.0</title>
+    <meta http-equiv='Content-Type' content='text/html;charset=utf-8'/>
+    <!--
       === NOTA BENE ===
       For the three scripts below, if your spec resides on dev.w3 you can check them
       out in the same tree and use relative links so that they'll work offline,
-     --> 
-    <script src='../../respec-w3c-common.js' class='remove'></script> 
-    <script src='../../web-payments-common.js' class='remove'></script> 
+     -->
+    <link rel="stylesheet" href="spec.css">
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' async class='remove'></script>
     <script type="text/javascript" class="remove">
       var respecConfig = {
           // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
           specStatus:           "CG-DRAFT",
-          
-          // the specification's short name, as in http://www.w3.org/TR/short-name/
-          shortName:            "web-commerce",
 
-          // subtitle for the specification
-          subtitle: "Product Offers and Digital Receipts for the Web",
+          // the specification's short name, as in http://www.w3.org/TR/short-name/
+          shortName:            "web-payments-http-api",
 
           // if you wish the publication date to be other than today, set this
           // publishDate:  "2009-08-06",
- 
+
           // if there is a previously published draft, uncomment this and set its YYYY-MM-DD date
           // and its maturity status
           // previousPublishDate:  "1977-03-15",
           // previousMaturity:  "WD",
- 
+
           // if there a publicly available Editor's Draft, this is the link
-          edDraftURI:           "https://web-payments.org/specs/source/web-commerce",
- 
+          edDraftURI:           "https://web-payments.org/specs/source/web-payments-browser-api/",
+
           // if this is a LCWD, uncomment and set the end of its review period
           // lcEnd: "2009-08-05",
-  
+
           // editors, add as many as you like
           // only "name" is required
-          editors:  [
-              { name: "Manu Sporny", url: "http://digitalbazaar.com/",
+          editors: [
+              { name: "Manu Sporny", url: "https://manu.sporny.org/",
                 company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
           ],
 
-          // authors, add as many as you like. 
+          // authors, add as many as you like.
           // This is optional, uncomment if you have authors as well as editors.
           // only "name" is required. Same format as editors.
- 
-          //authors:  [
-          //    { name: "Your Name", url: "http://example.org/",
-          //      company: "Your Company", companyURL: "http://example.com/" },
-          //],
+
+          authors: [
+              { name: "Manu Sporny", url: "https://manu.sporny.org/",
+                company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
+              { name: "Dave Longley", url: "https://github.com/dlongley",
+                company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
+          ],
 
           // extend the bibliography entries
-          localBiblio: webpayments.localBiblio,
-          
+          //localBiblio: {},
+
           // name of the WG
-          wg:           "Web Payments Community Group",
-          
+          wg:           "W3C Web Payments Community Group",
+
           // URI of the public WG page
           wgURI:        "http://www.w3.org/community/webpayments/",
-          
+
           // name (with the @w3c.org) of the public mailing to which comments are due
-          wgPublicList: "public-webpayments@w3c.org",
-          
+          wgPublicList: "public-webpayments@w3.org",
+
           // URI of the patent status for this WG, for Rec-track documents
           // !!!! IMPORTANT !!!!
           // This is important for Rec-track documents, do not copy a patent URI from a random
@@ -70,926 +69,468 @@
           // Team Contact.
           wgPatentURI:  "",
           maxTocLevel: 4,
-          preProcess: [ webpayments.preProcess ]/*,
-          alternateFormats: [ {uri: "diff-20111214.html", label: "diff to previous version"} ],*/
-      };
-    </script> 
-    <script type="text/javascript" src="prettify.js" class="remove"></script>
-    <script type="text/javascript" src="lang-jsonld.js" class="remove"></script>
-    <script type="text/javascript" class="remove">
-      var oldonload = window.onload;
-      window.onload = function() {
-        if (oldonload) oldonload();
-        prettyPrint();
+          preProcess: [ ] /*,
+          alternateFormats: [ {uri: "diff-20111214.html", label: "diff to previous version"} ],
+          */
       };
     </script>
-  </head> 
-  <body> 
-    <section id='abstract'> 
-      <p>
-In order to support standardized commerce over the Web, it is vital that product 
-offers and the result of purchases can be expressed in a simple manner. This 
-specification enables the decentralized offer of products and services for 
-sale and the transaction process resulting in a digitally verifiable receipt 
-between the buyer and the vendor.
-      </p> 
-    </section> 
+</head>
 
-    <section id='sotd'> 
-      <p>
-This is a highly experimental specification that is attempting to unify the
-work performed in the the Web Payments Community Group, the Linked Data 
-community, and a number of other Web technology-related organizations . 
-As such, the specification borrows a number of concepts from each group and 
-attempts to sythesize these concepts into a solution that would be easily 
-implemented and deployed by Web developers in order to provide an elegant 
-product offer and digital receipt mechanism for the Web.
-      </p>
-    </section>
+<body>
+<section id="abstract">
+  <p>
+This document outlines how to register payment instruments, request payments,
+and acknowledge payment requests using a standard HTTP API.
+  </p>
+</section>
 
-    <section>
-      <h2>Introduction</h2>
-      <p class="issue">
-Add introductory text about the need for a simple electronic commerce standard
-for the Web.
-      </p>
-    </section>
+<section id="sotd">
 
-    <section>
-      <h2>The Conceptual Model</h2>
-      <p>
-There are three primary participants in a transaction; the 
-buyer, the vendor, and the payment processor.
-      </p>
-      <section>
-        <h3>Participants</h3>
-        <section>
-          <h4>Vendors</h4>
-          <p>
-A <tdef>vendor</tdef> is the entity providing an <tref>asset</tref> for sale. 
-Typically, the vendor is the legal owner 
-of the asset that is being listed for sale. Ownership of an asset can manifest 
-in a variety of different forms. Copyright ownership, physical ownership, and 
-sub-leased property or services are just a few of the types of ownership that 
-apply to vendors.
-          </p>
-        </section>
-      </section>
-      <section>
-        <h3>Commerce Model</h3>
-        <section>
-          <h4>Transactions</h4>
-A <tdef>transaction</tdef> is the exchange of value from one or more 
-source accounts into one or more destination accounts.
-        </section>
-        <section>
-          <h4>Assets</h4>
-An <tdef>asset</tdef> describes a particular item that is provided as a part 
-of a commercial
-transaction. It is usually an item that can be accessed or acquired on the
-basis of a sale or rental under the terms of a particular license. Examples
-of assets include web pages, crowd-funded loans or grants, music files, 
-video streams, use of virtual machines by the hour, 
-3D printer files for on-demand manufacturing, radio 
-spectrum and many other items that are capable of being transacted.
-          <p>
-          </p>
-        </section>
-        <section>
-          <h4>Licenses</h4>
-          <p>
-A <tdef>license</tdef> is a legal description of a licensee's rights to a 
-particular <tref>asset</tref>.
-Licenses are usually included as a part of a receipt to express what a buyer 
-may do with the asset that has been purchased.
-          </p>
-        </section>
-        <section>
-          <h4>Offers</h4>
-          <p>
-A <tdef>offer</tdef> describes the combination of an <tref>asset</tref> that 
-is for sale under a specific <tref>license</tref> and a set of payment terms 
-that must be fulfilled in order 
-to access the <tref>asset</tref>. Offers are often published on websites that 
-sell <tref>assets</tref> as a way to express wares for sale in a 
-decentralized manner.
-          </p>
-        </section>
-        <section>
-          <h4>Receipts</h4>
-          <p>
-A <tref>receipt</tref> is the result of a commercial transaction 
-and contains
-information such as the <tref>offer</tref>, the <tref>asset</tref> that was 
-purchased, the parties involved in the transaction, the <tref>license</tref> 
-outlining the rights to the <tref>asset</tref>, and payment information 
-associated with the transaction.
-          </p>
-        </section>
-      </section>      
-    </section>
+  <p>There are a number of ways that one may participate in the development of
+    this specification:</p>
 
-    <section>
-      <h2>Base Technologies</h2>
-      <p>
-This specification builds on a number of successful Internet and Web technologies. These
-technologies are introduced in this section.
-      </p>
+  <ul>
+    <li>Ad-hoc technical discussion primarily occurs on the public community mailing list:
+      <a href="http://lists.w3.org/Archives/Public/public-webpayments/">public-webpayments@w3.org</a></li>
 
-      <section>
-        <h3>Representational State Transfer</h3>
-        <p>
-REpresentational State Transfer [[REST]] is the architectural style that underpins
-the World Wide Web. It consists of a set of constraints to ensure that servers,
-gateways, proxies and clients may interact in a way that is predictable.
-Systems that are designed with this architecture in mind are called RESTful
-systems. This system is designed to be RESTful by ensuring that the constraints of
-REST are applied to all transactions that follow this system.
-        </p>
-      </section>
+    <li><a href="http://payswarm/minutes/">Public Web Payments Community Group teleconferences</a>
+    are held on Wednesdays at 1600UTC every other week.</li>
 
-      <section>
-        <h3>JavaScript Object Notation for Linking Data</h3>
-        <p>
-JavaScript Object Notation for Linking Data [[!JSON-LD]] is a lightweight Linked 
-Data format. It is easy for humans to read and write. It is easy for machines 
-to parse and generate. It is based on the already successful JSON format and 
-provides a way to help JSON data interoperate at Web-scale. If you are already 
-familiar with JSON, writing JSON-LD is very easy. There is a smooth migration 
-path from the JSON you use today, to the JSON-LD you will use in the future. 
-These properties make JSON-LD an ideal Linked Data interchange language for 
-JavaScript environments, Web services, and JSON document-based databases.
-        </p>
-      </section>
+    <li>Specification bugs and issues should be reported in the
+      <a href="https://github.com/web-payments/web-payments.org/issues">issue tracker</a>
+      if you do not want to send an e-mail to the public-webpayments mailing
+      list.</li>
 
-      <section>
-        <h3>The Advanced Encryption Standard</h3>
-        <p>
-The Advanced Encryption Standard (AES) [[!AES]] is a world standard 
-adopted by the
-United States Government and used to secure a vast majority of the
-commercial transactions over the Internet via OpenSSL. Since much of the data
-exchanged over this system is sensitive, it is important that a 
-strong cryptography suite is utilized to digitally sign and transfer the 
-messages.
-        </p>
-      </section>
-    </section>
+    <li><a href="https://github.com/web-payments/web-payments.org/tree/master/">Source code</a>
+      for the specification can be found on Github.</li>
 
-    <section>
-      <h2>The Purchase Process</h2>
-      
-      <p>
-The simplest purchase process includes four distinct steps; publishing an
-<tref>asset</tref>, publishing a <tref>license</tref>, publishing a 
-<tref>offer</tref>, and performing the purchase. Typically, the 
-<tref>vendor</tref> publishes the <tref>asset</tref> description and the
-<tref>offer</tref>. Anyone may publish a <tref>license</tref> that is used in 
-a <tref>offer</tref>. The purchase is performed via a 
-<tref>payment processor</tref>.
-      </p>
+  </ul>
+</section>
 
-        <p>
-While it is possible to express <tref>asset</tref>s, <tref>license</tref>s,
-and <tref>offer</tref>s on the Web in many different machine-readable 
-formats, to ensure that implementations do not become more complicated than 
-necessary, all <tref>asset</tref>s, <tref>license</tref>s and 
-<tref>offer</tref> MUST be expressed in JSON-LD [[!JSON-LD]] format.
-        </p>
+<section class="informative">
+  <h1>Introduction</h1>
 
-      <section>
-        <h3>Publishing an Asset</h3>
-        <p>
-An <tref>asset</tref> describes a particular item that is provided as a part 
-of a commercial transaction. It is usually an item that can be accessed or 
-acquired on the
-basis of a sale or rental under the terms of a particular <tref>license</tref>. 
-Examples of assets include web pages, music files, video streams, virtual 
-machines intended to be paid for by the CPU-hour, 3D printer files for 
-on-demand manufacturing, radio spectrum and crowd-funded loans and grants.
-        </p>
+  <p>
+This HTTP API enables a web application to initiate payment for a product or
+service by responding with an HTTP 402 Payment Required response and
+enough data to initiate and complete a payment flow. The
+implementation of this feature is expected to be implemented by any HTTP
+server and client that is interested in executing payments.
+  </p>
+  <section class="informative">
+    <h2>How to Read this Document</h2>
 
-        <p>
-The following example describes a web page <tref>asset</tref> with the title 
-"PaySwarm in Practice". The article was created by 
-"Digital Bazaar, Inc." and the information in the asset is valid from 
-November 28th, 2010 to November 28th, 2011. 
-The asset is digitally signed by the organization providing it
-and thus can be cached, stored and then presented to someone else in a manner
-that is verifiable by the receiving party.
-        </p>
-        <pre class="example prettyprint language-jsonld">
-{
-  "@context": "https://w3id.org/payments/v1",
-  "id": "http://example.org/articles/1#asset",
-  "type": ["Asset", "WebPage"],
-  "title": "PaySwarm in Practice",
-  "description": "This article covers how to use PaySwarm on your Website.",
-  "creator": {
-    "type": "Organization",
-    "name": "Digital Bazaar, Inc.",
-  }
-  "contentUrl": "http://example.org/articles/1",
-  "validFrom": "2010-11-28T00:00:00Z",
-  "validUntil": "2011-11-28T00:00:00Z"
-  "signature": {
-    "type": "GraphSignature2012",
-    "created": "2010-11-28T00:00:00Z",
-    "creator": "https://payswarm.example.com/i/digital-bazaar#key-5",
-    "signature": "OWM3YzI4OGQzNGVkMzV...IyZTk2MzQzNmExMgo="
-  }
-}</pre>
-        
-        <p>
-In order to publish this asset on a Web page, a <tref>vendor</tref> MUST 
-mark the data up in JSON-LD and place it into an HTML file. For example,
-assume that the following file is served from the 
-<code>http://example.org/articles/1-purchase</code> URL:
-        </p>
+    <p>This document is a detailed specification for a HyperText Transfer Protocol
+      application programming interface (HTTP API) for executing payments via
+      an HTTP client and server. The document is primarily intended for the following
+      audiences:</p>
 
-        <pre class="example prettyprint language-html">
-&lt;html>
- &lt;head>
-   &lt;title>Buy: PaySwarm in Practice&lt;/title>
- &lt;/head>
- &lt;body>
+    <ul>
+      <li>Software developers who want to understand the design decisions and
+        algorithms behind the API.</li>
+      <li>Software developers who want to implement the API.</li>
+    </ul>
+  </section>
+  <section class="normative">
+    <h3>Terminology</h3>
+    <p>
+TODO: Add Web Payments IG terminology here.
+    </p>
+  </section>
 
-   &lt;script type="application/ld+json">
-{
-  "@context": "https://w3id.org/payments/v1",
-  "id": "http://example.org/articles/1#asset",
-  "type": ["Asset", "WebPage"],
-  "title": "PaySwarm in Practice",
-  "description": "This article covers how to use PaySwarm on your Website.",
-  "creator": {
-    "type": "Organization",
-    "name": "Digital Bazaar, Inc.",
-  }
-  "contentUrl": "http://example.org/articles/1",
-  "validFrom": "2010-11-28T00:00:00Z",
-  "validUntil": "2011-11-28T00:00:00Z"
-  "signature": {
-    "type": "GraphSignature2012",
-    "created": "2010-11-28T00:00:00Z",
-    "creator": "https://payswarm.example.com/i/digital-bazaar#key-5",
-    "signature": "OWM3YzI4OGQzNGVkMzV...IyZTk2MzQzNmExMgo="
-  }
-}
-   &lt;/script>
+</section>
 
-  <!-- Not only must the asset be listed (above), but an offer as well -->
+<section>
+  <h2>Payment Flow Overview</h2>
+  <ol class="algorithm">
+    <li>
+The payee's web page requests payment by responding with a 402 Payment Required
+response code and a URL to fetch the <code>request</code> from.
+    </li>
+    <li>
+The payment agent fetches the <code>request</code>.
+    </li>
+    <li>
+The payment agent scans the list of previously registered payment instruments
+and finds matches against <code>acceptedSchemes</code> in
+<code>request</code>.
+    </li>
+    <li>
+A payment instrument is selected by the payment agent or the payer. The
+process MAY consist of one or more of the following steps:
+      <ol class="algorithm">
+        <li>
+If there is only one instrument that matches, that is automatically set
+to the <em>selected payment instrument</em>.
+        </li>
+        <li>
+If there is a pre-existing preference set by the payer that narrows the
+selection of the payment instrument to one match, the match is set to the
+<em>selected payment instrument</em>.
+        </li>
+        <li>
+If there is more than one potential match, the payer is asked which 
+instrument they would like to use and the selection is set to the
+<em>selected payment instrument</em>
+        </li>
+        <li>
+If there are no matches, the payer is notified and may be taken to an
+alternate flow where a matching payment instrument is acquired.
+        </li>
+      </ol>
+    </li>
+    <li>
+If the payment instrument does not require the payment flow to switch
+to a 3rd party payment processor (e.g. cryptocurrency),
+then the <a>payment acknowledgement</a> is generated locally and the web
+application that called </code>.
+    </li>
+    <li>
+If the instrument requires the payment flow to switch to a 3rd party
+payer payment processor (e.g. push-payment like a PayPal/Google Wallet-like instrument, ACH, ISO20022 style instrument):
+      <ol class="algorithm">
+        <li>
+The payment agent forwards the <code>request</code>, and 
+<em>selected payment instrument</em> via <code>postMessage</code> to the
+<code>paymentRequestService</code> in the payment instrument for approval.
+        </li>
+      </ol>
+    </li>
+    <li>
+If the instrument requires the payment flow to switch to a 3rd party 
+payee payment processor (e.g. pull-payment like non-EMV magstripe credit
+card with embossed PAN and CVV2, or tokenized credit card):
+      <ol class="algorithm">
+        <li>
+The payment agent forwards the request on via <code>postMessage()</code>
+to the <code>paymentRequestService</code> in the 
+<code>acceptedScheme</code> (note that the payee
+sets this, not the payment instrument).
+        </li>
+      </ol>
+    </li>
+    <li>
+The payment flow is then transferred to the entity that is going to 
+generate the <em>payment acknowledgment</em> (locally installed 
+payment instrument, payee's payment service provider, or payer's 
+payment service provider).
+    </li>
+    <li>
+Once the entity in control of the payment flow finalizes the
+<em>payment acknowledgement</em>, even if the message is to
+acknowledge that the payment failed, the <em>payment acknowledgement</em>
+is generated and <code>navigator.payment.acknowledge(acknowledgement)</code>
+is called.
+  </ol>
+  <p>
+The diagram below outlines the basic payment flow described above.
+<img style="display: block; margin-left: auto; margin-right: auto;
+  max-height:100%; max-width:50%;" src="basicOfferAndPurchase.svg">
+  </p>
+</section>
 
-  &lt;button onclick="buyItem()">Buy&lt;/button>
+<section>
+  <h2>Detailed Payment Flow</h2>
+  <p class="issue">
+Describe the payment flow in detail here using Adrian's flow diagram and Ian's
+steps.
+  </p>
 
- &lt;/body>
-&lt;/html>
+  <section>
+    <h3>Payment Instrument Registration</h3>
+    <ol>
+      <li>
+The payer navigates to a payment service provider website to sign up.</li>
+      </li>
+      <li>
+During sign-up, the <code>navigator.payment.register()</code> call is made
+to register a payment instrument:
+      <pre class="example" title="Example of a credit card registration">
+var card = {
+  '@context': 'https://w3id.org/web-payments/v1',
+  type: 'PaymentInstrument',
+  scheme: 'https://w3id.org/payment-schemes#Visa',
+  label: 'ExampleBank Visa Card',
+  paymentRequestService: 'https://pay.example.com/services/cards'
+};
+
+// register the payment instrument - at this point, the interface asks the
+// person for approval to store the new payment instrument
+var promise = navigator.payment.register(card);
+
+// this happens when the registration completes with success or a failure
+promise.then(function(result) {
+  // card has been registered, do something
+}).catch(function(err) {
+  // card has not been registered, do something
+});
         </pre>
+      </li>
+    </ol>
+  </section>
 
-        <p>
-It may not initially be clear why an <tref>asset</tref> would need to be
-digitally signed. There are two major reasons that assets MUST be digitally
-signed in order to take part in a secure financial system. The first is to
-ensure, from a legal standpoint, that the person or organization claiming 
-ownership over the asset is clear. The second is to ensure that forgery 
-cannot occur on any of the asset information claimed by the owner of the asset.
-For example, if the asset were listed on an non-secure HTTP-based Web site, 
-the information could be easily modified in transit.
-        </p>
-        
-      </section>
-
-      <section>
-        <h3>Publishing a License</h3>
-        <p>
-A <tref>license</tref> is a legal description of a licensee's rights to a 
-particular <tref>asset</tref>.
-Licenses are usually included as a part of a <tref>receipt</tref> 
-to express what a buyer may do with an asset that has been purchased. A license
-can include a number of rights bestowed upon the licensesee as well as further
-limitations on those rights. For example, how an asset may be
-re-broadcast, how often a digital asset may be physically reproduced, what an 
-asset may specifically not be used for, and liability limitations when using the 
-asset are but a few of the rights and obligations expressible via a license.
-        </p>
-        
-        <p>
-The following example describes a very simple license for personal use.
-        </p>
-        <pre class="example prettyprint language-jsonld">
-{
-   "@context": "https://w3id.org/payments/v1",
-   "id": "http://payswarm.example.com/licenses/personal-use",
-   "type": "License",
-   "format": "text/html",
-   "licenseTemplate": "This personal use license allows you to save the 
-      purchased asset onto any device that you own for your personal enjoyment
-      and make up to &lt;span property=\"ex:physicalCopies\" /&gt; printed
-      copies of the work for personal use."
-   "licenseTerms": 
-   {
-      "ex:physicalCopies": 5
-   }
-}
-        </pre>
-
-        <p class="note">
-<tref>License</tref>s do not need to be created for each site on the Web. In
-many cases, common licenses can be placed on a website and re-used by a large
-number of sites that sell assets under similar license terms.
-        </p>
-
-      </section>
-
-      <section>
-        <h3>Publishing a offer</h3>
-
-        <p>
-A <tref>offer</tref> describes the combination of an <tref>asset</tref> 
-that is for sale under a specific <tref>license</tref> and a set of payment 
-terms that must be fulfilled in order to access the asset. offers are often 
-published on websites that sell assets as a way to express things
-that are for sale, in a decentralized manner.
-        </p>
-
-        <p>
-The following example describes an <tref>asset</tref> for sale 
-for $0.05 USD under a <tref>license</tref>
-that covers acceptable use of blog posts. The offer is valid from March 2nd 
-2011 to March 3rd 2011. The only restriction on additional payees is that the 
-<tref>payment processor</tref> (the organization processing the payment) 
-may only take a maximum of 10% of the final sale price to cover their fees.
-        </p>
-
-        <pre class="example prettyprint language-jsonld">
-{
-  "@context": "https://w3id.org/payments/v1",
-  "id": "http://example.com/articles/1#offer",
-  "type": "Offer",
-  "payee": [{
-    "id": "http://example.com/articles/1#offer-payee",
-    "type": "Payee",
-    "currency": "USD",
-    "destination": "https://payswarm.example.com/i/bob/accounts/primary",
-    "rate": "0.05",
-    "rateType": "FlatAmount",
-    "comment": "Payment for PaySwarm in Practice by Digital Bazaar."
-  }],
-  "payeeRule": [{
-    "type": "PayeeRule",
-    "destinationOwnerType": "payment processor",
-    "maximumRate": "10",
-    "rateType": "InclusivePercentage"
-  }],
-  "asset": "http://example.com/articles/1#asset",
-  "assetHash": "14618b56ff597a2fed560db9aa0610fe442106a4",
-  "license": "http://payswarm.example.com/licenses/blogging",
-  "licenseHash": "0d8866836917f8ef58af44accb6efab9a10610ad",
-  "validFrom": "2011-03-02T00:00:00+0000",
-  "validUntil": "2011-03-03T00:00:00+0000"
-  "signature": {
-    "type": "GraphSignature2012",
-    "created": "2011-03-02T00:00:00Z",
-    "creator": "https://payswarm.example.com/i/bob/keys/4",
-    "signatureValue": "KXtwA5kXZBJzj1rkPMJmGDROjM+fpi2cJIB+Xqf10="
+  <section>
+    <h3>Processing a Payment Request</h3>
+    <ol>
+      <li>
+The payer navigates to a payee's website.</li>
+      <li>
+The payer finds an item to payment and initiates the payment flow
+(by clicking a button, swiping, speaking a voice command, etc.).
+      </li>
+      <li>
+The payee application generates a signed payment request, which is an
+[[!JSON-LD]] object that contains enough information to process the
+payment:
+      <pre class="example" title="Example of a payment request">
+var req = {
+  '@context': 'https://w3id.org/web-payments/v1',
+  type: 'PaymentRequest',
+  description: 'Payment to ExampleMerch for widgets',
+  acceptedScheme: {
+    scheme: 'https://w3id.org/payment-schemes#Visa',
+    transfer: {
+      amount: '4.35',
+      currency: 'USD'
+    },
+    destination: '20389472398',
+  },
+  paymentCompleteService: 'https://payee.example.com/services/paymentComplete?transaction=923847298',
+  signature: {
+    type: 'LinkedDataSignature2015',
+    creator: 'https://payee.example.com/keys/23',
+    created: '2015-09-23T20:21:34Z',
+    nonce: '239807882930744352',
+    signatureValue: 'OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI='
   }
-}</pre>
+};
 
-      </section>
+// request payment and get a promise that is resolved on payment
+var promise = navigator.payment.request(req);
 
-      <section>
-        <h3>Performing a Purchase</h3>
+// resolve the promise
+promise.then(function(result) {
+  // payment was processed by the payment processor
+}).catch(function(err) {
+  // payment failed to be processed by the payment processor
+});
+      </pre>
+      </li>
+    </ol>
+  </section>
 
+  <section>
+    <h3>Processing a Payment Acknowledgement</h3>
+    <ol>
+      <li>
+The payment service provider receives a payment request, authenticates the
+payer, and gets approval to proceed with the payment from the payer.
+      </li>
+      <li>
+Once approval has been provided by the payer, the payment is processed
+      </li>
+      <li>
+The payment service processor generates a signed payment acknowledgement
+message, which is a [[!JSON-LD]] object that contains enough information to
+verify that the transaction has completed in success or failure by the
+payee application:
+        <pre class="example" title="Example of a payment acknowledgement">
+var acknowledgement = {
+  '@context': 'https://w3id.org/web-payments/v1',
+  type: 'PaymentAcknowledgement',
+  description: 'Payment to ExampleMerch for widgets',
+  selectedScheme: {
+    scheme: 'https://w3id.org/payment-schemes#Visa',
+    status: 'authorized',
+    token: '10025AB',
+    transfer: {
+      amount: '4.35',
+      currency: 'USD'
+    },
+    destination: '20389472398'
+  },
+  signature: {
+    type: 'LinkedDataSignature2015',
+    creator: 'https://payment-service-provider.example.com/keys/12',
+    created: '2015-09-23T20:23:15Z',
+    nonce: '239807882930744352',
+    signatureValue: 'm4NTIyZTOGQzNGVkMzVkZ...OWM32NjIgoYzI43Q3ODIy='
+  }
+};
+
+// acknowledge that the payment was processed
+navigator.payment.acknowledge(acknowledgement);
+        </pre>
+      </li>
+    </ol>
+  </section>
+</section>
+
+<section>
+  <h2>The Application Programming Interface</h2>
+
+  <p class="issue">
+This browser-based API is provided for convenience purposes only. The
+existence of the API is absolutely not a requirement for the basic operation
+of the Web Payments protocol. No browser API is necessary in order for a
+Web application to initiate payment and receive an acknowledgement of the
+result of the payment.
+  </p>
+
+  <p>This API provides a clean mechanism that enables developers to
+    initiate payments in a User Agent.
+    A conformant payment agent MUST implement the entirety of the
+    following API.</p>
+
+  <section>
+    <h3>NavigatorPayment</h3>
+
+    <p>Navigator Payment is the name of the high-level programming
+      interface that Web developers use to initiate payments. If MUST be
+      made available via the <code>navigator.payment</code> object.</p>
+
+    <dl title="interface NavigatorPayment" class="idl">
+      <dt>Promise register()</dt>
+      <dd>
         <p>
-A normal purchase, as opposed to an automatic purchase, is typically performed
-via a Web browser-based <tref>user agent</tref> when the <tref>participant</tref>
-has never performed a purchase with the <tref>vendor</tref>'s website. The 
-process consists of re-directing the Web browser to the buyer's 
-payment processor for the purposes of authorizing payment to the vendor for a
-particular <tref>offer</tref>. If a payment authorization is not approved,
-the user agent is re-directed back to the vendor's website with an error.
-If the payment authorization is approved, the user agent is re-directed back to
-the vendor's website with a short-form <tref>receipt</tref>, which 
-is used as a proof-of-purchase for the vendor's offer.
+Typically called by a payment processor to register a payment instrument for
+later use during a payment request.
         </p>
-
-        <section>
-          <h2>Purchase Terms</h2>
-          <p>
-There are a number of terms that are used during the course of the purchase
-process.
-          <dl>
-            <dt><tdef>offer hash</tdef></dt>
-            <dd>
-An identifier created by processing a <tref>offer</tref> expressed as
-JSON-LD through the 
-<a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">
-RDF Graph Normalization Algorithm</a> and then generating a
-SHA-1 hash of the result.
-            </dd>
-            <dt><tdef>purchase callback</tdef></dt>
-            <dd>
-An URL that will be on the receiving end of an HTTP POST from the
-<tref>payment processor</tref> with the result of a purchase request.
-            </dd>
-            <dt><tdef>reference identifier</tdef></dt>
-            <dd>
-A string value that MUST be greater than one character and less than 256
-characters used by the <tref>vendor</tref> to track purchases. These 
-identifiers can be used to ensure that <tref>asset</tref> that can be purchased 
-multiple times, like game tokens, can be tracked by the vendor.
-These identifiers also allow the vendor to protect against unintended
-double-purchasing due to network failures.
-            </dd>
-            <dt><tdef>receipt</tdef></dt>
-            <dd>
-The resulting value of a purchase request, typically sent from the
-<tref>payment processor</tref> to the <tref>publishing agent</tref>. The 
-object typically contains a <tref>short-form receipt</tref> as well as 
-other information that may be pertinent to the transaction.
-            </dd>
-          </dl>
-          </p>
-        </section>
-
-        <section>
-        <h3>The Purchase Algorithm</h3>
-
+        <dl class="parameters">
+          <dt>object instrument</dt>
+          <dd>
+A [[!JSON-LD]] encoded payment instrument.
+          </dd>
+        </dl>
+      </dd>
+      <dt>Promise request()</dt>
+      <dd>
         <p>
-The normative algorithm for performing a purchase is expressed below.
+Typically called by a payee to initiate a payment. The instrument is
+encoded in [[!JSON-LD]] format.
         </p>
-        
-        <ol class="algorithm">
-          <li>
-The <tref>publishing agent</tref> initiates a purchase request for a specific
-offer by re-directing the <tref>user agent</tref> to the 
-<tref>receipts service</tref> endpoint:
-            <ol class="algorithm">
-              <li>
-Generate the <tdef>purchase request URL</tdef> by concatenating the
-<tref>receipts service</tref> and the following URL parameters:
-                <dl>
-                  <dt><code>offer</code></dt>
-                  <dd>
-The URL-encoded <tref>offer</tref> URL.
-                  </dd>
-                  <dt><code>offer-hash</code></dt>
-                  <dd>
-A SHA-1 hash of the offer after being normalized using the 
-<a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">RDF Graph
-Normalization Algorithm</a>.
-                  </dd>
-                  <dt><code>callback</code></dt>
-                  <dd>
-A de-referenceable URL that MUST be able to process an HTTP POST request from
-the <tref>payment processor</tref> with the result of a purchase request.
-                  </dd>
-                  <dt><code>reference</code></dt>
-                  <dd>
-An optional, internal reference identifier used by the 
-<tref>publishing agent</tref> to keep track of the purchase.
-                  </dd>
-                  <dt><code>nonce</code></dt>
-                  <dd>
-An optional cryptographic value that will be used in the encrypted response 
-to the vendor. The response nonce is utilized to prevent replay attacks on
-the vendor.
-                  </dd>
-                </dl>
-              </li>
-              <li>
-Perform an HTTP 303 redirect via the <tref>user agent</tref> to the 
-<tref>purchase request URL</tref>.
-              </li>
-            </ol>
-          </li>
-          <li>
-The <tref>payment processor</tref> processes the purchase request ending in
-either an error message or a short-form <tref>receipt</tref>:
-            <ol class="algorithm">
-              <li>
-If the purchase was denied or failed for any reason, the payment processor
-performs an HTTP POST via the <tref>user agent</tref> back to the callback
-URL supplied by the <tref>vendor</tref> during the initiation of the purchase
-request.
-              </li>
-              <li>
-If the purchase was successful, then a <tref>receipt</tref> is generated and
-transmitted to the vendor:
-              <ol class="algorithm">
-                <li>To generate the <tref>receipt</tref> in
-JSON-LD format, the following pieces of information MUST be expressed:
-                <dl>
-                  <dt><code>@context</code></dt>
-                  <dd>
-A single value containing the string <code>https://w3id.org/payments/v1</code> 
-or a list containing that context URL as the first member, where subsequent 
-context declarations MUST NOT override any values in the first member.
-                  </dd>
-                    <dt><code>type</code></dt>
-                    <dd>
-The value <code>Receipt</code>.
-                    </dd>
-                  <dt><code>preference</code></dt>
-                  <dd>
-An array of preferences that are requested by either the 
-<tref>payment processor</tref> or the <tref>participant</tref>. All valid options
-are listed below:
-                    <div>
-<code>preAuthorization</code> - The <tref>participant</tref> has pre-authorized 
-future purchases for the <tref>vendor</tref> and thus the 
-<a href="#automatic-purchasing-algorithm">Automatic Purchasing Algorithm</a> 
-MAY be used for future purchases. If this preference setting is mentioned, the
-<tref>publishing agent</tref> SHOULD store the <tref>participant</tref>'s information,
-including the <tref>payment processor</tref> URL, for use in future 
-automatic transactions.
-                    </div>
-                  </dd>
-                  <dt><code>receipt</code></dt>
-The receipt used in the receipt is a summary of the digital receipt that was
-finalized via the <tref>payment processor</tref>. It includes the minimum
-amount of information necessary for the <tref>publishing agent</tref> to 
-correctly identify the <tref>offer</tref> that was transacted:
-                  <dd>
-                    <dl>
-                    <dt><code>type</code></dt>
-                    <dd>
-The value <code>receipt</code>.
-                    </dd>
-                    <dt><code>asset</code></dt>
-                    <dd>
-An URL to the <tref>asset</tref> that was purchased.
-                    </dd>
-                    <dt><code>assetHash</code></dt>
-                    <dd>
-The SHA-1 hash of the <tref>asset</tref> information after being normalized 
-using the <a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">RDF Graph
-Normalization Algorithm</a>.
-                    </dd>
-                    <dt><code>reference</code></dt>
-                    <dd>
-The <tref>reference identifier</tref>, if one was suppied via the purchase 
-request.
-                    </dd>
-                    <dt><code>license</code></dt>
-                    <dd>
-An URL to the <tref>license</tref> describing the rights associated with the
-<tref>asset</tref> that was purchased.
-                    </dd>
-                    <dt><code>licenseHash</code></dt>
-                    <dd>
-The SHA-1 hash of the <tref>license</tref> information after being normalized 
-using the <a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">RDF Graph
-Normalization Algorithm</a>.
-                    </dd>
-                    <dt><code>offer</code></dt>
-                    <dd>
-An URL to the <tref>offer</tref> that was purchased.
-                    </dd>
-                    <dt><code>offerHash</code></dt>
-                    <dd>
-The SHA-1 hash of the <tref>offer</tref> information after being normalized 
-using the <a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">RDF Graph
-Normalization Algorithm</a>.
-                    </dd>
-                    <dt><code>assetAcquirer</code></dt>
-                    <dd>
-An URL to the <tref>identity</tref> that acquired the <tref>asset</tref>.
-                    </dd>
-                  </dl>
-                </dl>
-              </li>
-              <li>
-The payment processor initiates an HTTP POST via the 
-<tref>user agent</tref> back to the <code>callback</code> URL supplied by the 
-<tref>publishing agent</tref> during the initiation of the purchase request. 
-The POST data is digitally signed according to the 
-<a href="#request-signature-algorithm">Request Signature Algorithm</a>, 
-using the <tref>public key</tref> of the <tref>payment processor</tref>.
-              </li>
-            </ol>
-          </li>
-          <li>
-The <tref>publishing agent</tref> acts upon the callback by granting access
-to the <tref>asset</tref> if the purchase was successful, or providing a page 
-detailing why the purchase failed. The <tref>publishing agent</tref> SHOULD note 
-any preferences in the <tref>receipt</tref> and utilize those preferences when
-processing future purchases from the <tref>participant</tref>.
-          </li>
-        </ol>
-        </section>
-      </section>
-
-      <section>
-        <h3>Performing Automatic Purchases</h3>
-
+        <dl class="parameters">
+          <dt>object request</dt>
+          <dd>
+Typically called by a payee to request a payment. The request is
+encoded in [[!JSON-LD]] format.
+          </dd>
+        </dl>
+      </dd>
+      <dt>void acknowledge()</dt>
+      <dd>
         <p>
-An automatic purchase is one where a <tref>vendor</tref> has been
-previously authorized by a <tref>participant</tref> to perform purchases with
-the buyer's pre-authorized consent. This is typically used when the 
-<tref>vendor</tref> is trusted, or when the <tref>participant</tref> has set a 
-spending limit with the <tref>vendor</tref> and does not want to be bothered
-unless that spending limit is reached. Automatic purchases are designed to 
-get out of the way of the <tref>participant</tref> and make the transactional flow
-as friction-free as possible.
+Typically called by a payment processor to acknowledge that a payment request
+has been processed. The acknowledgement is encoded in [[!JSON-LD]] format.
         </p>
+        <dl class="parameters">
+          <dt>object acknowledgement</dt>
+          <dd>
+A [[!JSON-LD]] encoded payment acknowledgement describing the result of a
+payment request.
+          </dd>
+        </dl>
+      </dd>
+    </dl>
 
-        <section>
-          <h2>Purchase Terms</h2>
-          <p>
-There are a number of terms that are used during the course of the purchase
-process.
-          <dl>
-            <dt><tdef>purchase request</tdef></dt>
-            <dd>
-A message consisting of a <tref>offer</tref> URL, 
-a <tref>offer hash</tref>, a <tref>participant</tref> identity URL, and
-an optional <tref>reference identifier</tref>. The message is typically sent
-by a <tref>publishing agent</tref> to a <tref>participant</tref>'s 
-<tref>payment processor</tref> for processing.
-            </dd>
-          </dl>
-        </section>
-        
-        <section>
-        <h3>The Automatic Purchase Algorithm</h3>
-        
-        <p>
-The automatic purchase algorithm is outlined below:
-        </p>
+  </section> <!-- end of NavigatorPayment -->
+</section>
 
-        <ol class="algorithm">
-          <li>
-The <tref>publishing agent</tref> prepares a <tref>purchase request</tref> by
-constructing a JSON-LD message. The following pieces of information
-MUST be expressed:
-            <dl>
-              <dt><code>@context</code></dt>
-              <dd>
-A single value containing the string <code>https://w3id.org/payments/v1</code> 
-or a list containing that context URL as the first member, where subsequent 
-context declarations MUST NOT override any values in the first member.
-              </dd>
-              <dt><code>type</code></dt>
-              <dd>
-The value <code>PurchaseRequest</code>.
-              </dd>
-              <dt><code>offer</code></dt>
-              <dd>
-An URL to the <tref>offer</tref> that was purchased.
-              </dd>
-              <dt><code>offerHash</code></dt>
-              <dd>
-The SHA-1 hash of the <tref>offer</tref> information after being normalized 
-using the <a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">RDF Graph
-Normalization Algorithm</a>.
-              </dd>
-              <dt><code>assetAcquirer</code></dt>
-              <dd>
-An URL to the <tref>identity</tref> that acquired the <tref>asset</tref>.
-              </dd>
-              <dt><code>reference</code></dt>
-              <dd>
-The <tref>reference identifier</tref>, if one was suppied via the purchase 
-request.
-              </dd>
-            </dl>
-          </li>        
-          <li>
-The <tref>purchase request</tref> is digitally signed by the 
-<tref>publishing agent</tref> according to the
-<a href="#request-signature-algorithm">Request Signature Algorithm</a> using
-the <tref>private key</tref> associated with the <tref>offer</tref> in the
-<tref>purchase request</tref>. The <tref>purchase request</tref> is
-sent to the <tref>payment processor</tref> of the <tref>participant</tref>
-via an HTTPS connection. The HTTPS protocol MUST be used for transmission 
-of the request and retrieval of the response to prevent replay attacks.
-          </li>
-          <li>
-The <tref>payment processor</tref> checks to ensure that the
-<tref>publishing agent</tref> is authorized to perform an automatic purchase 
-on behalf of the provided <tref>participant</tref> identity URL and responds to the
-<tref>publishing agent</tref>:
-          <ol class="algorithm">
-            <li>
-If the transaction fails, the exception details are placed into a JSON-LD 
-message and sent to the <tref>publishing agent</tref>.
-              <div class="issue">
-Determine how this system will handle response exceptions.
-              </div>
-            </li>
-            <li>
-If the transaction is successful, a <tref>receipt</tref> is generated for
-the <tref>publishing agent</tref>. The following fields MUST be
-placed into the response:
-              <dl>
-                <dt><code>@context</code></dt>
-                <dd>
-A single value containing the string <code>https://w3id.org/payments/v1</code> 
-or a list containing that context URL as the first member, where subsequent 
-context declarations MUST NOT override any values in the first member.
-                </dd>
-                  <dt><code>type</code></dt>
-                  <dd>
-The value <code>Receipt</code>.
-                  </dd>
-                <dt><code>receipt</code></dt>
-The receipt used in the receipt is a summary of the digital receipt that was
-finalized via the <tref>payment processor</tref>. It includes the minimum
-amount of information necessary for the <tref>publishing agent</tref> to 
-correctly identify the <tref>offer</tref> that was transacted:
-                <dd>
-                  <dl>
-                  <dt><code>type</code></dt>
-                  <dd>
-The value <code>receipt</code>.
-                  </dd>
-                  <dt><code>asset</code></dt>
-                  <dd>
-An URL to the <tref>asset</tref> that was purchased.
-                  </dd>
-                  <dt><code>assetHash</code></dt>
-                  <dd>
-The SHA-1 hash of the <tref>asset</tref> information after being normalized 
-using the <a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">RDF Graph
-Normalization Algorithm</a>.
-                  </dd>
-                  <dt><code>reference</code></dt>
-                  <dd>
-The <tref>reference identifier</tref>, if one was suppied via the purchase 
-request.
-                  </dd>
-                  <dt><code>license</code></dt>
-                  <dd>
-An URL to the <tref>license</tref> describing the rights associated with the
-<tref>asset</tref> that was purchased.
-                  </dd>
-                  <dt><code>licenseHash</code></dt>
-                  <dd>
-The SHA-1 hash of the <tref>license</tref> information after being normalized 
-using the <a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">RDF Graph
-Normalization Algorithm</a>.
-                  </dd>
-                  <dt><code>offer</code></dt>
-                  <dd>
-An URL to the <tref>offer</tref> that was purchased.
-                  </dd>
-                  <dt><code>offerHash</code></dt>
-                  <dd>
-The SHA-1 hash of the <tref>offer</tref> information after being normalized 
-using the <a href="http://json-ld.org/spec/latest/rdf-graph-normalization/">RDF Graph
-Normalization Algorithm</a>.
-                  </dd>
-                  <dt><code>assetAcquirer</code></dt>
-                  <dd>
-An URL to the <tref>identity</tref> that acquired the <tref>asset</tref>.
-                  </dd>
-                </dl>
-              </dl>
-            </li>
-            <li>
-The <tref>receipt</tref> is encrypted according to the 
-<a href="#response-encryption-algorithm">Response Encryption Algorithm</a>, 
-using the <tref>public key</tref> associated with the <tref>private key</tref>
-that digitally signed the <tref>offer</tref>. The encrypted receipt is
-sent to the <tref>publishing agent</tref>.
-            </li>
-          </ol>
-          <li>
-The <tref>publishing agent</tref> receives the response, which will either be
-an exception or a receipt, and responds accordingly to the 
-<tref>user agent</tref>.
-          </li>
-        </ol>
-        </section>
-      </section>
+<section class="appendix informative">
+  <h2>Messages Addendum</h2>
 
-      <section>
-        <h3>The Receipt</h3>
+  <p>
+Multiple types of payment instruments may be supported using this approach:
+  </p>
+  <pre class="example" title="Example of Bitcoin registration">
+var bitcoin = {
+  '@context': 'https://w3id.org/web-payments/v1',
+  type: 'PaymentInstrument',
+  scheme: 'https://w3id.org/payment-schemes#Bitcoin',
+  id: 'bitcoin:19Cgacam5sVryog9QQKjFo1GApy34Qat83',
+  label: 'BitExample Bitcoin Account',
+  privateKeyBitcoin: '5JSjcscTvQcCb2h7LxFGwEzVqHM6HqC6xanxwZtymRZg5Z1yWot',
+  paymentRequestService: 'https://bitcoin.example.com/services/bitcoin'
+};
 
-        <p>
-A <tref>receipt</tref> is the result of a commercial transaction and 
-contains information such as the <tref>offer</tref>, 
-the <tref>asset</tref> that was purchased, the parties involved in the
-transaction, the <tref>license</tref> outlining the rights to the 
-asset, and payment information associated with the transaction.
-        </p>
+// register the payment instrument - at this point, the interface asks the
+// person for approval to store the new payment instrument
+var promise = navigator.payment.register(bitcoin);
 
-        <p>
-The following example describes a purchase that occurred on March 2nd 2011
-for a Web-based article called "PaySwarm in Practice". The article was authored
-and listed for sale by Bob Smith and a personal use license was acquired by 
-Jane, who may now peruse the article.
-        </p>
+// this happens when the registration completes with success or a failure
+promise.then(function(result) {
+  // bitcoin instrument has been registered, do something
+}).catch(function(err) {
+  // bitcoin instrument has not been registered, do something
+});
+  </pre>
 
-        <pre class="example prettyprint language-jsonld">
-{
-  "@context": "https://w3id.org/payments/v1",
-  "id": "http://payswarm.example.com/receipts/28394729347",
-  "type": ["Transaction", "receipt"],
-  "amount": "0.05",
-  "currency": "USD",
-  "created": "2011-03-02T03:00:53Z",
-  "payee": [{
-    "type": "Payee",
-    "currency": "USD",
-    "destination": "https://payswarm.example.com/i/processor/accounts/main",
-    "payeePosition": 0,
-    "rate": "10.00",
-    "rateContext": "TaxExempt",
-    "rateType": "InclusivePercentage",
-    "comment": "payment processor Transaction Processing"
-  }],
-  "transfer": [{
-    "type": "Transfer",
-    "amount": "0.045",
-    "currency": "USD",
-    "destination": "https://payswarm.example.com/i/bob/accounts/primary",
-    "forTransaction": "http://payswarm.example.com/receipts/28394729347",
-    "source": "https://payswarm.example.com/i/jane/accounts/primary",
-    "comment": "Payment for PaySwarm in Practice by Bob Smith."
+  <p>
+Multiple payment requests may be collected into a single request.
+  </p>
+
+  <pre class="example" title="Example of a complex payment request">
+var req = {
+  '@context': 'https://w3id.org/web-payments/v1',
+  type: 'PaymentRequest'
+  description: 'Payment to ExampleMerch for Widget 1'
+  acceptedScheme: [{
+    scheme: [
+      'https://w3id.org/payment-schemes#Visa',
+      'https://w3id.org/payment-schemes#Mastercard',
+      'https://w3id.org/payment-schemes#Discover'
+    ],
+    transfer: {
+      amount: '4.35',
+      currency: 'USD'
+    },
+    destination: '20389472398'
   }, {
-    "type": "Transfer",
-    "amount": "0.005",
-    "currency": "USD",
-    "destination": "https://payswarm.example.com/i/processor/accounts/main",
-    "forTransaction": "http://payswarm.example.com/receipts/28394729347",
-    "source": "https://payswarm.example.com/i/jane/accounts/primary",
-    "comment": "payment processor Transaction Processing"
-  }],
-  "created": "2011-03-02T03:00:53Z",
-  "asset": {
-    "id": "http://example.com/articles/1#asset",
-    "type": ["Asset", "WebPage"],
-    "creator": {
-      "name": "Bob Smith"
+    scheme: 'https://w3id.org/payment-schemes#Bitcoin',
+    transfer: {
+      amount: '0.0177',
+      currency: 'BTC'
     },
-    "title": "PaySwarm in Practice",
-    "assetProvider": "https://payswarm.example.com/i/bob",
-    "payment processor": "https://payswarm.example.com/client-config",
-    "contentUrl": "http://example.com/articles/1",
-    "signature": {
-      "type": "GraphSignature2012",
-      "created": "2011-03-02T00:00:00Z",
-      "creator": "https://payswarm.example.com/i/bob/keys/4",
-      "signatureValue": "XuLEGuq+ne56Qsc5Nic8I="
-    }
+    destination: '3QJmV3qfvL9SuYo34YihAf3sRCW3qSinyC'
   },
-  "assetAcquirer": "https://payswarm.example.com/i/jane",
-  "license": {
-    "id": "http://payswarm.example.com/licenses/blogging",
-    "type": "License",
-    "format": "text/html",
-    "licenseTemplate": "Personal Use License ..."
-  },
-  "offer": {
-    "id": "http://example.com/articles/1#offer",
-    "type": ["Offering", "offer"],
-    "payee": [{
-      "id": "http://example.com/articles/1#offer-payee",
-      "type": "Payee",
-      "currency": "USD",
-      "destination": "https://payswarm.example.com/i/bob/accounts/primary",
-      "rate": "0.05",
-      "rateType": "FlatAmount",
-      "comment": "Payment for PaySwarm in Practice by Digital Bazaar."
-    }],
-    "payeeRule": [{
-      "type": "PayeeRule",
-      "destinationOwnerType": "payment processor",
-      "maximumRate": "10",
-      "rateType": "InclusivePercentage"
-    }],
-    "asset": "http://example.com/articles/1#asset",
-    "assetHash": "14618b56ff597a2fed560db9aa0610fe442106a4",
-    "license": "http://payswarm.example.com/licenses/blogging",
-    "licenseHash": "0d8866836917f8ef58af44accb6efab9a10610ad",
-    "signature": {
-      "type": "GraphSignature2012",
-      "created": "2011-03-02T00:00:00Z",
-      "creator": "https://payswarm.example.com/i/bob/keys/4",
-      "signatureValue": "KXtwA5kXZBJzj1rkPMJmGDROjM+fpi2cJIB+Xqf10="
-    },
-    "validFrom": "2011-03-02T00:00:00+0000",
-    "validUntil": "2011-03-03T00:00:00+0000"
-  },
-  "offerHash": "1acbd23c3a7d8827270a959a2760f7c4ded98022",
-  "signature": {
-    "type": "GraphSignature2012",
-    "created": "2011-03-02T03:00:53Z",
-    "creator": "https://payswarm.example.com/i/processor/keys/1",
-    "signatureValue": "ZnGaAs0QCIfEAvCsj2TxRTs8ekQrbbQUXvTLWcQ0kQ=="
+  paymentCompleteService: 'https://payee.example.com/services/paymentComplete?transaction=923847298',
+  signature: {
+    type: 'LinkedDataSignature2015',
+    creator: 'https://payee.example.com/keys/23',
+    created: '2015-09-23T20:21:34Z',
+    nonce: '239847230947223423',
+    signatureValue: 'OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI='
   }
-}</pre>
+};
 
-      </section>
+// request payment and get a promise that is resolved on payment acknowledgement
+var promise = navigator.payment.request(req);
 
-      <section>
-        <h3>Verifying a Purchase</h3>
+// resolve the promise (performed in the next section)
+promise.then(function(acknowledgement) {
+  // payment was processed by the payment processor
+  // acknowledgement may contain scheme-specific information
+}).catch(function(err) {
+  // payment failed to be processed by the payment processor
+});
+  </pre>
 
-      </section>
+</section>
 
-    </section>
+<section class="appendix informative">
+  <h2>Acknowledgements</h2>
 
-  </body> 
+  <p>
+The editor would like to thank the Web Payments Community Group, and the
+Web Payments Interest Group.
+  </p>
+
+  <p>
+Thanks to the following individuals, in order of their first name, for
+their input on the specification: ...
+  </p>
+
+</section>
+
+</body>
 </html>
-
