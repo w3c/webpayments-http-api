@@ -72,8 +72,15 @@
           preProcess: [ ] /*,
           alternateFormats: [ {uri: "diff-20111214.html", label: "diff to previous version"} ],
           */
+
       };
     </script>
+
+    <!-- Sequence diagrams -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://bramp.github.io/js-sequence-diagrams/js/sequence-diagram-min.js"></script>
 </head>
 
 <body>
@@ -145,15 +152,17 @@ TODO: Add Web Payments IG terminology here.
   <ol class="algorithm">
     <li>
 The payee's web page requests payment by responding with a 402 Payment Required
-response code and a URL to fetch the <code>request</code> from.
+response code and a URL encoded in the <code>Location</code> header
+to fetch the <code>request</code> from.
     </li>
     <li>
-The payment agent fetches the <code>request</code>.
+The payment agent fetches the <code>request</code> from the URL specified
+in the <code>Location</code> header in the previous step.
     </li>
     <li>
 The payment agent scans the list of previously registered payment instruments
-and finds matches against <code>acceptedSchemes</code> in
-<code>request</code>.
+and finds matches against <code>acceptedSchemes</code> in the
+payment request.
     </li>
     <li>
 A payment instrument is selected by the payment agent or the payer. The
@@ -169,7 +178,7 @@ selection of the payment instrument to one match, the match is set to the
 <em>selected payment instrument</em>.
         </li>
         <li>
-If there is more than one potential match, the payer is asked which 
+If there is more than one potential match, the payer is asked which
 instrument they would like to use and the selection is set to the
 <em>selected payment instrument</em>
         </li>
@@ -182,51 +191,63 @@ alternate flow where a matching payment instrument is acquired.
     <li>
 If the payment instrument does not require the payment flow to switch
 to a 3rd party payment processor (e.g. cryptocurrency),
-then the <a>payment acknowledgement</a> is generated locally and the web
-application that called </code>.
+then the <a>payment acknowledgement</a> is generated locally and the
+payee's software is notified.
     </li>
     <li>
 If the instrument requires the payment flow to switch to a 3rd party
-payer payment processor (e.g. push-payment like a PayPal/Google Wallet-like instrument, ACH, ISO20022 style instrument):
+payer payment processor (e.g. push-payment like a PayPal/Google
+Wallet-like instrument, ACH, ISO20022 style instrument):
       <ol class="algorithm">
         <li>
-The payment agent forwards the <code>request</code>, and 
-<em>selected payment instrument</em> via <code>postMessage</code> to the
+The payment agent forwards the <code>request</code>, and
+<em>selected payment instrument</em> via an HTTP POST to the
 <code>paymentRequestService</code> in the payment instrument for approval.
         </li>
       </ol>
     </li>
     <li>
-If the instrument requires the payment flow to switch to a 3rd party 
+If the instrument requires the payment flow to switch to a 3rd party
 payee payment processor (e.g. pull-payment like non-EMV magstripe credit
 card with embossed PAN and CVV2, or tokenized credit card):
       <ol class="algorithm">
         <li>
-The payment agent forwards the request on via <code>postMessage()</code>
-to the <code>paymentRequestService</code> in the 
+The payment agent forwards the request on via an HTTP POST
+to the <code>paymentRequestService</code> in the
 <code>acceptedScheme</code> (note that the payee
 sets this, not the payment instrument).
         </li>
       </ol>
     </li>
     <li>
-The payment flow is then transferred to the entity that is going to 
-generate the <em>payment acknowledgment</em> (locally installed 
-payment instrument, payee's payment service provider, or payer's 
+The payment flow is then transferred to the entity that is going to
+generate the <em>payment acknowledgment</em> (locally installed
+payment instrument, payee's payment service provider, or payer's
 payment service provider).
     </li>
     <li>
 Once the entity in control of the payment flow finalizes the
 <em>payment acknowledgement</em>, even if the message is to
 acknowledge that the payment failed, the <em>payment acknowledgement</em>
-is generated and <code>navigator.payment.acknowledge(acknowledgement)</code>
-is called.
+is generated and the payer's payment agent is notified via an HTTP 200
+success code.
   </ol>
   <p>
-The diagram below outlines the basic payment flow described above.
-<img style="display: block; margin-left: auto; margin-right: auto;
-  max-height:100%; max-width:50%;" src="basicOfferAndPurchase.svg">
+The diagram below outlines the basic payment flow described above for a
+push-based payment.
   </p>
+  <div class="diagram">
+participant PSP
+participant Payer
+participant Payee
+Payer->Payee: request resource (GET)
+Payee-->>Payer: payment required (HTTP 402)
+Payer->Payee: payment request (GET)
+Payee-->>Payer: payment request (HTTP 200)
+Payer->PSP: process payment (POST)
+PSP-->>Payer: payment request acknowledgement (HTTP 200)
+Payer->Payee: payment request acknowledgement (POST)
+  </div>
 </section>
 
 <section>
@@ -531,6 +552,10 @@ their input on the specification: ...
   </p>
 
 </section>
+
+<script>
+  $(".diagram").sequenceDiagram({theme: 'hand'});
+</script>
 
 </body>
 </html>
