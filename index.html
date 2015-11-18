@@ -331,7 +331,7 @@ Content-Length: 873
     "scheme": "https://w3id.org/payment-schemes#Visa",
     "transfer": {
       "amount": "2.99",
-      "currency": "USD'
+      "currency": "USD"
     },
     "destination": "20389472398"
   },
@@ -341,7 +341,7 @@ Content-Length: 873
     "creator": "https://videos.example.com/keys/14",
     "created": "2015-09-23T20:21:34Z",
     "nonce": "239807882930744352",
-    "signatureValue": "OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI='
+    "signatureValue": "OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI="
   }
 }
         </pre>
@@ -374,7 +374,7 @@ Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
     "scheme": "https://w3id.org/payment-schemes#Visa",
     "transfer": {
       "amount": "2.99",
-      "currency": "USD'
+      "currency": "USD"
     },
     "destination": "20389472398"
   },
@@ -384,7 +384,7 @@ Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
     "creator": "https://videos.example.com/keys/14",
     "created": "2015-09-23T20:21:34Z",
     "nonce": "239807882930744352",
-    "signatureValue": "OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI='
+    "signatureValue": "OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI="
   }
 }
         </pre>
@@ -403,22 +403,22 @@ Content-Length: 623
   "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentAcknowledgement",
   "description": "Payment to ExampleMerch for widgets",
-  "selectedScheme: {
+  "selectedScheme": {
     "scheme": "https://w3id.org/payment-schemes#Visa",
     "status": "authorized",
     "token": "10025AB",
-    "transfer: {
+    "transfer": {
       "amount": "2.99",
-      "currency": "USD'
+      "currency": "USD"
     },
-    "destination": "20389472398'
+    "destination": "20389472398"
   },
   "signature": {
     "type": "LinkedDataSignature2015",
     "creator": "https://example.visa.com/keys/1223",
     "created": "2015-09-23T20:23:15Z",
     "nonce": "239807882930744352",
-    "signatureValue": "32NjIm4NTIyZTOGQzNGVkMzVkZ...MgoYz32NjIOWI43Q3ODIy='
+    "signatureValue": "32NjIm4NTIyZTOGQzNGVkMzVkZ...MgoYz32NjIOWI43Q3ODIy="
   }
 }
         </pre>
@@ -435,22 +435,22 @@ Content-Type: application/ld+json
   "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentAcknowledgement",
   "description": "Payment to ExampleMerch for widgets",
-  "selectedScheme: {
+  "selectedScheme": {
     "scheme": "https://w3id.org/payment-schemes#Visa",
     "status": "authorized",
     "token": "10025AB",
-    "transfer: {
+    "transfer": {
       "amount": "2.99",
-      "currency": "USD'
+      "currency": "USD"
     },
-    "destination": "20389472398'
+    "destination": "20389472398"
   },
   "signature": {
     "type": "LinkedDataSignature2015",
     "creator": "https://example.visa.com/keys/1223",
     "created": "2015-09-23T20:23:15Z",
     "nonce": "239807882930744352",
-    "signatureValue": "32NjIm4NTIyZTOGQzNGVkMzVkZ...MgoYz32NjIOWI43Q3ODIy='
+    "signatureValue": "32NjIm4NTIyZTOGQzNGVkMzVkZ...MgoYz32NjIOWI43Q3ODIy="
   }
 }
         </pre>
