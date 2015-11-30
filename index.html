@@ -9,84 +9,84 @@
       out in the same tree and use relative links so that they'll work offline,
      -->
     <link rel="stylesheet" href="spec.css">
-    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' async class='remove'></script>
+    <script src='//www.w3.org/Tools/respec/respec-w3c-common' async class='remove'></script>
+    <script src='utils.js' async class='remove'></script>
     <script type="text/javascript" class="remove">
-      var respecConfig = {
-          // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
-          specStatus:           "CG-DRAFT",
+var respecConfig = {
+    // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use ED.
+    specStatus:           "CG-DRAFT",
 
-          // the specification's short name, as in http://www.w3.org/TR/short-name/
-          shortName:            "web-payments-http-api",
+    // the specification's short name, as in http://www.w3.org/TR/short-name/
+    shortName:            "web-payments-http-api",
 
-          // if you wish the publication date to be other than today, set this
-          // publishDate:  "2009-08-06",
+    // if you wish the publication date to be other than today, set this
+    // publishDate:  "2009-08-06",
 
-          // if there is a previously published draft, uncomment this and set its YYYY-MM-DD date
-          // and its maturity status
-          // previousPublishDate:  "1977-03-15",
-          // previousMaturity:  "WD",
+    // if there is a previously published draft, uncomment this and set its YYYY-MM-DD date
+    // and its maturity status
+    // previousPublishDate:  "1977-03-15",
+    // previousMaturity:  "WD",
 
-          // if there a publicly available Editor's Draft, this is the link
-          edDraftURI:           "https://web-payments.org/specs/source/web-payments-browser-api/",
+    // if there a publicly available Editor's Draft, this is the link
+    edDraftURI:           "https://web-payments.org/specs/source/web-payments-browser-api/",
 
-          // if this is a LCWD, uncomment and set the end of its review period
-          // lcEnd: "2009-08-05",
+    // if this is a LCWD, uncomment and set the end of its review period
+    // lcEnd: "2009-08-05",
 
-          // editors, add as many as you like
-          // only "name" is required
-          editors: [
-              { name: "Manu Sporny", url: "https://manu.sporny.org/",
-                company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
-          ],
+    // editors, add as many as you like
+    // only "name" is required
+    editors: [
+      { name: "Manu Sporny", url: "https://manu.sporny.org/",
+        company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
+    ],
 
-          // authors, add as many as you like.
-          // This is optional, uncomment if you have authors as well as editors.
-          // only "name" is required. Same format as editors.
+    // authors, add as many as you like.
+    // This is optional, uncomment if you have authors as well as editors.
+    // only "name" is required. Same format as editors.
 
-          authors: [
-              { name: "Manu Sporny", url: "https://manu.sporny.org/",
-                company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
-              { name: "Dave Longley", url: "https://github.com/dlongley",
-                company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
-          ],
+    authors: [
+      { name: "Manu Sporny", url: "https://manu.sporny.org/",
+        company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
+      { name: "Dave Longley", url: "https://github.com/dlongley",
+        company: "Digital Bazaar, Inc.", companyURL: "http://digitalbazaar.com/" },
+    ],
 
-          // extend the bibliography entries
-          //localBiblio: {},
+    // extend the bibliography entries
+    //localBiblio: {},
 
-          // name of the WG
-          wg:           "W3C Web Payments Community Group",
+    // name of the WG
+    wg:           "W3C Web Payments Community Group",
 
-          // URI of the public WG page
-          wgURI:        "http://www.w3.org/community/webpayments/",
+    // URI of the public WG page
+    wgURI:        "http://www.w3.org/community/webpayments/",
 
-          // name (with the @w3c.org) of the public mailing to which comments are due
-          wgPublicList: "public-webpayments@w3.org",
+    // name (with the @w3c.org) of the public mailing to which comments are due
+    wgPublicList: "public-webpayments@w3.org",
 
-          // URI of the patent status for this WG, for Rec-track documents
-          // !!!! IMPORTANT !!!!
-          // This is important for Rec-track documents, do not copy a patent URI from a random
-          // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
-          // Team Contact.
-          wgPatentURI:  "",
-          maxTocLevel: 4,
-          preProcess: [ ] /*,
-          alternateFormats: [ {uri: "diff-20111214.html", label: "diff to previous version"} ],
-          */
+    // URI of the patent status for this WG, for Rec-track documents
+    // !!!! IMPORTANT !!!!
+    // This is important for Rec-track documents, do not copy a patent URI from a random
+    // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
+    // Team Contact.
+    wgPatentURI:  "",
+    maxTocLevel: 4,
+    preProcess: [ ] /*,
+    alternateFormats: [ {uri: "diff-20111214.html", label: "diff to previous version"} ],
+    */
 
-      };
+};
     </script>
-
-    <!-- Sequence diagrams -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="https://bramp.github.io/js-sequence-diagrams/js/sequence-diagram-min.js"></script>
+    <style>
+.sequence-diagram {
+  margin: auto;
+}
+    </style>
 </head>
 
 <body>
 <section id="abstract">
   <p>
-This document outlines how to register payment instruments, request payments,
+This document outlines how to register <a>payment instrument</a>s, request payments,
 and acknowledge payment requests using a standard HTTP API.
   </p>
 </section>
@@ -140,18 +140,52 @@ server and client that is interested in executing payments.
   </section>
   <section class="normative">
     <h3>Terminology</h3>
-    <p>
-TODO: Add Web Payments IG terminology here.
-    </p>
+
+    <div data-include="//w3c.github.io/webpayments-ig/latest/common/terms.html"
+      data-oninclude="restrictReferences">
+    </div>
+
   </section>
 
 </section>
 
 <section>
   <h2>Payment Flow Overview</h2>
+
+  <p>
+The diagram below outlines a basic HTTP client payment flow with no errors.
+The basic flow starts out with the <a>payer</a> accessing a protected resource.
+The <a>payee</a> provides a location where a payment request for the resource
+can be fetched. The <a>payer</a> fetches the payment request, selects
+a payment instrument, and sends the request and the selected instrument
+on to the appropriate <a>payment service provider</a> for processing. The
+<a>payment service provider</a> initiates the payment and sends a
+payment request acknowledgement back to the <a>payer</a>. The <a>payer</a>
+then forwards the payment request acknowledgement back to the
+<a>payee</a>. If there are no errors, the <a>payee</a> then grants access to
+the resource that was purchased.
+  </p>
+
+  <script type='text/jumly+sequence'>
+@found "Payment Service Provider (customer)"
+@found "Payer client (customer)", ->
+  @message "access resource", "Payee server (merchant)", ->
+    @reply "402 Payment Required", "Payer client (customer)"
+@found "Payer client (customer)", ->
+  @message "GET payment request", "Payee server (merchant)", ->
+    @reply "payment request", "Payer client (customer)"
+@found "Payer client (customer)", ->
+  @message "POST payment request", "Payment Service Provider (customer)", ->
+    @reply "payment request acknowledgement", "Payer client (customer)"
+@found "Payer client (customer)", ->
+  @message "POST payment request acknowledgement", "Payee server (merchant)", ->
+    @message "verification", ->
+      @reply "grant access to resource", "Payer client (customer)"
+  </script>
+
   <ol class="algorithm">
     <li>
-The payee's web page requests payment by responding with a 402 Payment Required
+The <a>payee</a>'s web page requests payment by responding with a 402 Payment Required
 response code and a URL encoded in the <code>Location</code> header
 to fetch the <code>request</code> from.
     </li>
@@ -160,38 +194,38 @@ The payment agent fetches the <code>request</code> from the URL specified
 in the <code>Location</code> header in the previous step.
     </li>
     <li>
-The payment agent scans the list of previously registered payment instruments
+The payment agent scans the list of previously registered <a>payment instrument</a>s
 and finds matches against <code>acceptedSchemes</code> in the
 payment request.
     </li>
     <li>
-A payment instrument is selected by the payment agent or the payer. The
+A <a>payment instrument</a> is selected by the payment agent or the <a>payer</a>. The
 process MAY consist of one or more of the following steps:
       <ol class="algorithm">
         <li>
 If there is only one instrument that matches, that is automatically set
-to the <em>selected payment instrument</em>.
+to the <em>selected <a>payment instrument</a></em>.
         </li>
         <li>
-If there is a pre-existing preference set by the payer that narrows the
-selection of the payment instrument to one match, the match is set to the
-<em>selected payment instrument</em>.
+If there is a pre-existing preference set by the <a>payer</a> that narrows the
+selection of the <a>payment instrument</a> to one match, the match is set to the
+<em>selected <a>payment instrument</a></em>.
         </li>
         <li>
-If there is more than one potential match, the payer is asked which
+If there is more than one potential match, the <a>payer</a> is asked which
 instrument they would like to use and the selection is set to the
-<em>selected payment instrument</em>
+<em>selected <a>payment instrument</a></em>
         </li>
         <li>
-If there are no matches, the payer is notified and may be taken to an
-alternate flow where a matching payment instrument is acquired.
+If there are no matches, the <a>payer</a> is notified and may be taken to an
+alternate flow where a matching <a>payment instrument</a> is acquired.
         </li>
       </ol>
     </li>
     <li>
-If the payment instrument does not require the payment flow to switch
+If the <a>payment instrument</a> does not require the payment flow to switch
 to a 3rd party payment processor (e.g. cryptocurrency),
-then the <a>payment acknowledgement</a> is generated locally and the
+then the payment acknowledgement is generated locally and the
 payee's software is notified.
     </li>
     <li>
@@ -201,8 +235,8 @@ Wallet-like instrument, ACH, ISO20022 style instrument):
       <ol class="algorithm">
         <li>
 The payment agent forwards the <code>request</code>, and
-<em>selected payment instrument</em> via an HTTP POST to the
-<code>paymentRequestService</code> in the payment instrument for approval.
+<em>selected <a>payment instrument</a></em> via an HTTP POST to the
+<code>paymentRequestService</code> in the <a>payment instrument</a> for approval.
         </li>
       </ol>
     </li>
@@ -214,22 +248,22 @@ card with embossed PAN and CVV2, or tokenized credit card):
         <li>
 The payment agent forwards the request on via an HTTP POST
 to the <code>paymentRequestService</code> in the
-<code>acceptedScheme</code> (note that the payee
-sets this, not the payment instrument).
+<code>acceptedScheme</code> (note that the <a>payee</a>
+sets this, not the <a>payment instrument</a>).
         </li>
       </ol>
     </li>
     <li>
 The payment flow is then transferred to the entity that is going to
 generate the <em>payment acknowledgment</em> (locally installed
-payment instrument, payee's payment service provider, or payer's
+payment instrument, <a>payee</a>'s payment service provider, or <a>payer</a>'s
 payment service provider).
     </li>
     <li>
 Once the entity in control of the payment flow finalizes the
 <em>payment acknowledgement</em>, even if the message is to
 acknowledge that the payment failed, the <em>payment acknowledgement</em>
-is generated and the payer's payment agent is notified via an HTTP 200
+is generated and the <a>payer</a>'s payment agent is notified via an HTTP 200
 success code.
   </ol>
   <p class="issue">
@@ -241,18 +275,6 @@ Melvin Carvalho has also raised an issue noting that we may not want to use
 The diagram below outlines the basic payment flow described above for a
 push-based payment.
   </p>
-  <div class="diagram">
-participant PSP
-participant Payer
-participant Payee
-Payer->Payee: request resource (GET)
-Payee-->>Payer: payment required (HTTP 402)
-Payer->Payee: payment request (GET)
-Payee-->>Payer: payment request (HTTP 200)
-Payer->PSP: process payment (POST)
-PSP-->>Payer: payment request acknowledgement (HTTP 200)
-Payer->Payee: payment request acknowledgement (POST)
-  </div>
 </section>
 
 <section>
@@ -266,9 +288,9 @@ steps.
     <h3>Payment Instrument Registration</h3>
     <ol>
       <li>
-The payer's HTTP client navigates to a payment service provider website
-and authenticates itself to fetch a payment instrument to register:
-        <pre class="example" title="Authenticated GET of payment instrument">
+The <a>payer</a>'s HTTP client navigates to a payment service provider website
+and authenticates itself to fetch a <a>payment instrument</a> to register:
+        <pre class="example" title="Authenticated GET of <a>payment instrument</a>">
 GET /instruments/visa HTTP/1.1
 Host: mybank.example.org
 Date: Tue, 07 Jun 2017 20:51:35 GMT
@@ -282,10 +304,10 @@ Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
       </li>
       </li>
       <li>
-The payment service provider MUST respond with the payment instrument or
+The payment service provider MUST respond with the <a>payment instrument</a> or
 an HTTP error code. If successful, something like the following will be
 returned:
-        <pre class="example" title="Successful retrieval of payment instrument">
+        <pre class="example" title="Successful retrieval of <a>payment instrument</a>">
 HTTP/1.1 200 OK
 Date: Tue, 07 Jun 2017 20:51:36 GMT
 Content-Type: application/ld+json
@@ -307,7 +329,7 @@ Content-Length: 412
     <h3>Processing a Payment Request</h3>
     <ol>
       <li>
-The payer's HTTP client accesses a resource that requires payment:
+The <a>payer</a>'s HTTP client accesses a resource that requires payment:
         <pre class="example" title="Payer requests a resource that requires a payment">
 GET /movies/dr-strangelove HTTP/1.1
 Host: videos.example.com
@@ -315,7 +337,7 @@ Date: Tue, 07 Jun 2017 21:31:35 GMT
         </pre>
       </li>
       <li>
-The payee server notifies the payer that a payment is required along with a
+The <a>payee</a> server notifies the <a>payer</a> that a payment is required along with a
 payment request.
       <pre class="example" title="Example of a payment request">
 HTTP/1.1 402 Payment Required
@@ -354,7 +376,7 @@ Content-Length: 873
     <ol>
       <li>
 The payment service provider receives a payment request which is digitally
-signed by the payer, authenticates the payer, and proceeds with the payment:
+signed by the <a>payer</a>, authenticates the <a>payer</a>, and proceeds with the payment:
       <pre class="example" title="Example of a payment request">
 POST /services/cards/2745023475 HTTP/1.1
 Host: mybank.example.org
@@ -390,7 +412,7 @@ Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
         </pre>
       </li>
       <li>
-The payment service processor generates a signed payment acknowledgement
+The payment service provider generates a signed payment acknowledgement
 message, which is a [[!JSON-LD]] object that contains enough information to
 verify that the transaction has completed in success or failure:
         <pre class="example" title="Example of a payment acknowledgement">
@@ -424,8 +446,8 @@ Content-Length: 623
         </pre>
       </li>
       <li>
-The payment acknowledgement is then relayed back to the payer:
-        <pre class="example" title="Payment acknowledgement relayed back to payee">
+The payment acknowledgement is then relayed back to the <a>payer</a>:
+        <pre class="example" title="Payment acknowledgement relayed back to <a>payee</a>">
 POST /services/paymentComplete?transaction=923847298 HTTP/1.1
 Host: videos.example.com
 Date: Tue, 07 Jun 2017 20:51:35 GMT
@@ -456,9 +478,9 @@ Content-Type: application/ld+json
         </pre>
       </li>
       <li>
-The payee validates the payment acknowledgement, sets the appropriate access
-control for the resource, and re-directs the payer to the resource:
-        <pre class="example" title="Payment acknowledgement relayed back to payee">
+The <a>payee</a> validates the payment acknowledgement, sets the appropriate access
+control for the resource, and re-directs the <a>payer</a> to the resource:
+        <pre class="example" title="Payment acknowledgement relayed back to <a>payee</a>">
 HTTP/1.1 302 Found
 Date: Tue, 07 Jun 2017 20:51:36 GMT
 Location: /movies/dr-strangelove
@@ -483,9 +505,9 @@ their input on the specification: ...
 
 </section>
 
-<script>
-  $(".diagram").sequenceDiagram({theme: 'hand'});
-</script>
+<script src='//code.jquery.com/jquery-2.1.3.min.js' class='remove'></script>
+<script src='//coffeescript.org/extras/coffee-script.js' class='remove'></script>
+<script src='//jumly.tmtk.net/public/jumly.min.js' class='remove'></script>
 
 </body>
 </html>
