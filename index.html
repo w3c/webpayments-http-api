@@ -183,6 +183,14 @@ the resource that was purchased.
       @reply "grant access to resource", "Payer client (customer)"
   </script>
 
+  <p class="issue">
+It may be a good idea to return the payment request with the 402 response.
+The concern is that this would be a misrepresentation of the resource. The
+counter-argument is that a client shouldn't interpret a 402 response as
+the resource, and since 402 has not been formally defined yet, we could
+define it to always come with a payment request response.
+  </p>
+
   <ol class="algorithm">
     <li>
 The <a>payee</a>'s web page requests payment by responding with a 402 Payment Required
