@@ -86,7 +86,7 @@ var respecConfig = {
 <body>
 <section id="abstract">
   <p>
-This document outlines how to register <a>payment instrument</a>s, request payments,
+This document outlines how to register <a>payment app</a>s, request payments,
 and acknowledge payment requests using a standard HTTP API.
   </p>
 </section>
@@ -164,7 +164,7 @@ The diagram below outlines a basic HTTP client payment flow with no errors.
 The basic flow starts out with the <a>payer</a> accessing a protected resource.
 The <a>payee</a> provides a location where a payment request for the resource
 can be fetched. The <a>payer</a> fetches the payment request, selects
-a payment instrument, and sends the request and the selected instrument
+a payment app, and sends the request and the selected app
 on to the appropriate <a>payment service provider</a> for processing. The
 <a>payment service provider</a> initiates the payment and sends a
 payment request acknowledgement back to the <a>payer</a>. The <a>payer</a>
@@ -209,69 +209,69 @@ The payment agent fetches the <code>request</code> from the URL specified
 in the <code>Location</code> header in the previous step.
     </li>
     <li>
-The payment agent scans the list of previously registered <a>payment instrument</a>s
-and finds matches against <code>acceptedSchemes</code> in the
+The payment agent scans the list of previously registered <a>payment app</a>s
+and finds matches against <code>acceptedMethods</code> in the
 payment request.
     </li>
     <li>
-A <a>payment instrument</a> is selected by the payment agent or the <a>payer</a>. The
+A <a>payment app</a> is selected by the payment agent or the <a>payer</a>. The
 process MAY consist of one or more of the following steps:
       <ol class="algorithm">
         <li>
-If there is only one instrument that matches, that is automatically set
-to the <em>selected <a>payment instrument</a></em>.
+If there is only one app that matches, that is automatically set
+to the <em>selected <a>payment app</a></em>.
         </li>
         <li>
 If there is a pre-existing preference set by the <a>payer</a> that narrows the
-selection of the <a>payment instrument</a> to one match, the match is set to the
-<em>selected <a>payment instrument</a></em>.
+selection of the <a>payment app</a> to one match, the match is set to the
+<em>selected <a>payment app</a></em>.
         </li>
         <li>
 If there is more than one potential match, the <a>payer</a> is asked which
-instrument they would like to use and the selection is set to the
-<em>selected <a>payment instrument</a></em>
+app they would like to use and the selection is set to the
+<em>selected <a>payment app</a></em>
         </li>
         <li>
 If there are no matches, the <a>payer</a> is notified and may be taken to an
-alternate flow where a matching <a>payment instrument</a> is acquired.
+alternate flow where a matching <a>payment app</a> is acquired.
         </li>
       </ol>
     </li>
     <li>
-If the <a>payment instrument</a> does not require the payment flow to switch
+If the <a>payment app</a> does not require the payment flow to switch
 to a 3rd party payment processor (e.g. cryptocurrency),
 then the payment acknowledgement is generated locally and the
 payee's software is notified.
     </li>
     <li>
-If the instrument requires the payment flow to switch to a 3rd party
+If the app requires the payment flow to switch to a 3rd party
 payer payment processor (e.g. push-payment like a PayPal/Google
-Wallet-like instrument, ACH, ISO20022 style instrument):
+Wallet-like app, ACH, ISO20022 style app):
       <ol class="algorithm">
         <li>
 The payment agent forwards the <code>request</code>, and
-<em>selected <a>payment instrument</a></em> via an HTTP POST to the
-<code>paymentRequestService</code> in the <a>payment instrument</a> for approval.
+<em>selected <a>payment app</a></em> via an HTTP POST to the
+<code>paymentRequestService</code> in the <a>payment app</a> for approval.
         </li>
       </ol>
     </li>
     <li>
-If the instrument requires the payment flow to switch to a 3rd party
+If the app requires the payment flow to switch to a 3rd party
 payee payment processor (e.g. pull-payment like non-EMV magstripe credit
 card with embossed PAN and CVV2, or tokenized credit card):
       <ol class="algorithm">
         <li>
 The payment agent forwards the request on via an HTTP POST
 to the <code>paymentRequestService</code> in the
-<code>acceptedScheme</code> (note that the <a>payee</a>
-sets this, not the <a>payment instrument</a>).
+<code>acceptedMethod</code> (note that the <a>payee</a>
+sets this, not the <a>payment app</a>).
         </li>
       </ol>
     </li>
     <li>
 The payment flow is then transferred to the entity that is going to
 generate the <em>payment acknowledgment</em> (locally installed
-payment instrument, <a>payee</a>'s payment service provider, or <a>payer</a>'s
+payment app, <a>payee</a>'s payment service provider, or <a>payer</a>'s
 payment service provider).
     </li>
     <li>
@@ -300,13 +300,13 @@ steps.
   </p>
 
   <section>
-    <h3>Payment Instrument Registration</h3>
+    <h3>Payment app Registration</h3>
     <ol>
       <li>
 The <a>payer</a>'s HTTP client navigates to a payment service provider website
-and authenticates itself to fetch a <a>payment instrument</a> to register:
-        <pre class="example" title="Authenticated GET of <a>payment instrument</a>">
-GET /instruments/visa HTTP/1.1
+and authenticates itself to fetch a <a>payment app</a> to register:
+        <pre class="example" title="Authenticated GET of <a>payment app</a>">
+GET /apps/visa HTTP/1.1
 Host: mybank.example.org
 Date: Tue, 07 Jun 2017 20:51:35 GMT
 Accept: application/ld+json
@@ -319,10 +319,10 @@ Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
       </li>
       </li>
       <li>
-The payment service provider MUST respond with the <a>payment instrument</a> or
+The payment service provider MUST respond with the <a>payment app</a> or
 an HTTP error code. If successful, something like the following will be
 returned:
-        <pre class="example" title="Successful retrieval of <a>payment instrument</a>">
+        <pre class="example" title="Successful retrieval of <a>payment app</a>">
 HTTP/1.1 200 OK
 Date: Tue, 07 Jun 2017 20:51:36 GMT
 Content-Type: application/ld+json
@@ -330,8 +330,8 @@ Content-Length: 412
 
 {
   "@context": "https://w3id.org/web-payments/v1",
-  "type": "PaymentInstrument",
-  "scheme": "https://w3id.org/payment-schemes#Visa",
+  "type": "PaymentApp",
+  "paymentMethod": "https://w3id.org/payment-schemes#Visa",
   "label": "ExampleBank Visa Card",
   "paymentRequestService": "https://mybank.example.org/services/cards/2745023475"
 }
@@ -364,22 +364,15 @@ Content-Length: 873
   "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentRequest",
   "description": "Payment for Dr. Strangelove",
-  "acceptedScheme": {
-    "scheme": "https://w3id.org/payment-schemes#Visa",
+  "acceptedMethod": {
+    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
     "transfer": {
       "amount": "2.99",
       "currency": "USD"
     },
     "destination": "20389472398"
   },
-  "paymentCompleteService": "https://videos.example.com/services/paymentComplete?transaction=923847298",
-  "signature": {
-    "type": "LinkedDataSignature2015",
-    "creator": "https://videos.example.com/keys/14",
-    "created": "2015-09-23T20:21:34Z",
-    "nonce": "239807882930744352",
-    "signatureValue": "OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI="
-  }
+  "paymentCompleteService": "https://videos.example.com/services/paymentComplete?transaction=923847298"
 }
         </pre>
       </li>
@@ -407,22 +400,15 @@ Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
   "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentRequest",
   "description": "Payment for Dr. Strangelove",
-  "acceptedScheme": {
-    "scheme": "https://w3id.org/payment-schemes#Visa",
+  "acceptedMethod": {
+    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
     "transfer": {
       "amount": "2.99",
       "currency": "USD"
     },
     "destination": "20389472398"
   },
-  "paymentCompleteService": "https://videos.example.com/services/paymentComplete?transaction=923847298",
-  "signature": {
-    "type": "LinkedDataSignature2015",
-    "creator": "https://videos.example.com/keys/14",
-    "created": "2015-09-23T20:21:34Z",
-    "nonce": "239807882930744352",
-    "signatureValue": "OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI="
-  }
+  "paymentCompleteService": "https://videos.example.com/services/paymentComplete?transaction=923847298"
 }
         </pre>
       </li>
@@ -441,7 +427,7 @@ Content-Length: 623
   "type": "PaymentAcknowledgement",
   "description": "Payment to ExampleMerch for widgets",
   "selectedScheme": {
-    "scheme": "https://w3id.org/payment-schemes#Visa",
+    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
     "status": "authorized",
     "token": "10025AB",
     "transfer": {
@@ -449,13 +435,6 @@ Content-Length: 623
       "currency": "USD"
     },
     "destination": "20389472398"
-  },
-  "signature": {
-    "type": "LinkedDataSignature2015",
-    "creator": "https://example.visa.com/keys/1223",
-    "created": "2015-09-23T20:23:15Z",
-    "nonce": "239807882930744352",
-    "signatureValue": "32NjIm4NTIyZTOGQzNGVkMzVkZ...MgoYz32NjIOWI43Q3ODIy="
   }
 }
         </pre>
@@ -473,7 +452,7 @@ Content-Type: application/ld+json
   "type": "PaymentAcknowledgement",
   "description": "Payment to ExampleMerch for widgets",
   "selectedScheme": {
-    "scheme": "https://w3id.org/payment-schemes#Visa",
+    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
     "status": "authorized",
     "token": "10025AB",
     "transfer": {
@@ -481,13 +460,6 @@ Content-Type: application/ld+json
       "currency": "USD"
     },
     "destination": "20389472398"
-  },
-  "signature": {
-    "type": "LinkedDataSignature2015",
-    "creator": "https://example.visa.com/keys/1223",
-    "created": "2015-09-23T20:23:15Z",
-    "nonce": "239807882930744352",
-    "signatureValue": "32NjIm4NTIyZTOGQzNGVkMzVkZ...MgoYz32NjIOWI43Q3ODIy="
   }
 }
         </pre>
@@ -503,6 +475,53 @@ Location: /movies/dr-strangelove
       </li>
     </ol>
   </section>
+
+  <section>
+    <h2>Security Considerations</h2>
+
+    <section>
+      <h3>Message Integrity</h3>
+      <p>
+It is possible to sign any JSON-LD based message by using
+Linked Data Signatures, like so:
+      </p>
+
+      <pre class="example" title="Example of a signed payment request">
+POST /services/cards/2745023475 HTTP/1.1
+Host: mybank.example.org
+Date: Tue, 07 Jun 2017 20:51:35 GMT
+Accept: application/ld+json
+Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
+   algorithm="rsa-sha256",headers="(request-target) host date",
+   signature="jgSqYK0yKclIHfF9zdApVEbDp5eqj8C4i4X76pE+XHoxugXv7qnVrGR+30bmB
+              gtpR39I4utq17s9ghz/2QFVxlnToYAvbSVZJ9ulLd1HQBugO0jOyn9sXOtcN7
+              uNHBjqNCqUsnt0sw/cJA6B6nJZpyNqNyAXKdxZZItOuhIs78w="
+
+{
+  "@context": "https://w3id.org/web-payments/v1",
+  "type": "PaymentRequest",
+  "description": "Payment for Dr. Strangelove",
+  "acceptedMethod": {
+    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
+    "transfer": {
+      "amount": "2.99",
+      "currency": "USD"
+    },
+    "destination": "20389472398"
+  },
+  "paymentCompleteService": "https://videos.example.com/services/paymentComplete?transaction=923847298",
+  "signature": {
+    "type": "LinkedDataSignature2015",
+    "creator": "https://videos.example.com/keys/14",
+    "created": "2015-09-23T20:21:34Z",
+    "nonce": "239807882930744352",
+    "signatureValue": "OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI="
+  }
+}
+        </pre>
+    </section>
+  </section>
+
 </section>
 
 <section class="appendix informative">
