@@ -144,8 +144,7 @@ server and client that is interested in executing payments.
   <p class="issue">
 The terminology in this specification's terminology and messages need to be
 updated to match the
-<a href="https://github.com/w3c/webpayments/wiki/A-Payments-Initiation-Architecture-for-the-Web">Payments Architecture document</a>
-and the latest changes to the <a href="http://wicg.github.io/web-payments-browser-api/">Web Payments Browser API</a>.
+<a href="https://github.com/w3c/webpayments/wiki/A-Payments-Initiation-Architecture-for-the-Web">Payments Architecture document</a>.
   </p>
 
     <div data-include="//w3c.github.io/webpayments-ig/latest/common/terms.html"
@@ -171,6 +170,13 @@ payment request acknowledgement back to the <a>payer</a>. The <a>payer</a>
 then forwards the payment request acknowledgement back to the
 <a>payee</a>. If there are no errors, the <a>payee</a> then grants access to
 the resource that was purchased.
+  </p>
+
+  <p class="issue">
+The flow below reflects a fairly advanced tokenized payment scenario. We may
+want to use a simpler basic credit card flow where the customer doesn't have
+a payment service provider and just returns the credit card details to the
+merchant.
   </p>
 
   <script type='text/jumly+sequence'>
@@ -309,14 +315,26 @@ and authenticates itself to fetch a <a>payment app</a> to register:
 GET /apps/visa HTTP/1.1
 Host: mybank.example.org
 Date: Tue, 07 Jun 2017 20:51:35 GMT
-Accept: application/ld+json
+Accept: application/json
+Authorization: Digest username="jdoe", realm="jane@mybank.example.org", ...
+        </pre>
+        <div class="issue">
+While digest authentication is used above, more advanced authentication
+schemes may also be employed. For example, the mechanism below uses
+HTTP Signatures and public/private key cryptography to authenticate the client
+with the server:
+        <pre class="example" title="Authenticated GET of <a>payment app</a> using HTTP Signatures">
+GET /apps/visa HTTP/1.1
+Host: mybank.example.org
+Date: Tue, 07 Jun 2017 20:51:35 GMT
+Accept: application/json
 Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
    algorithm="rsa-sha256",headers="(request-target) host date",
    signature="jgSqYK0yKclIHfF9zdApVEbDp5eqj8C4i4X76pE+XHoxugXv7qnVrGR+30bmB
               gtpR39I4utq17s9ghz/2QFVxlnToYAvbSVZJ9ulLd1HQBugO0jOyn9sXOtcN7
               uNHBjqNCqUsnt0sw/cJA6B6nJZpyNqNyAXKdxZZItOuhIs78w="
         </pre>
-      </li>
+        </div>
       </li>
       <li>
 The payment service provider MUST respond with the <a>payment app</a> or
@@ -325,13 +343,12 @@ returned:
         <pre class="example" title="Successful retrieval of <a>payment app</a>">
 HTTP/1.1 200 OK
 Date: Tue, 07 Jun 2017 20:51:36 GMT
-Content-Type: application/ld+json
+Content-Type: application/json
 Content-Length: 412
 
 {
-  "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentApp",
-  "paymentMethod": "https://w3id.org/payment-schemes#Visa",
+  "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
   "label": "ExampleBank Visa Card",
   "paymentRequestService": "https://mybank.example.org/services/cards/2745023475"
 }
@@ -357,15 +374,14 @@ payment request.
       <pre class="example" title="Example of a payment request">
 HTTP/1.1 402 Payment Required
 Date: Tue, 07 Jun 2017 21:31:36 GMT
-Content-Type: application/ld+json
+Content-Type: application/json
 Content-Length: 873
 
 {
-  "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentRequest",
   "description": "Payment for Dr. Strangelove",
   "acceptedMethod": {
-    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
+    "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
     "transfer": {
       "amount": "2.99",
       "currency": "USD"
@@ -383,25 +399,19 @@ Content-Length: 873
     <h3>Processing a Payment Acknowledgement</h3>
     <ol>
       <li>
-The payment service provider receives a payment request which is digitally
-signed by the <a>payer</a>, authenticates the <a>payer</a>, and proceeds with the payment:
+The payment service provider receives a payment request, authenticates
+the <a>payer</a>, and proceeds with the payment:
       <pre class="example" title="Example of a payment request">
 POST /services/cards/2745023475 HTTP/1.1
 Host: mybank.example.org
 Date: Tue, 07 Jun 2017 20:51:35 GMT
-Accept: application/ld+json
-Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
-   algorithm="rsa-sha256",headers="(request-target) host date",
-   signature="jgSqYK0yKclIHfF9zdApVEbDp5eqj8C4i4X76pE+XHoxugXv7qnVrGR+30bmB
-              gtpR39I4utq17s9ghz/2QFVxlnToYAvbSVZJ9ulLd1HQBugO0jOyn9sXOtcN7
-              uNHBjqNCqUsnt0sw/cJA6B6nJZpyNqNyAXKdxZZItOuhIs78w="
+Accept: application/json
 
 {
-  "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentRequest",
   "description": "Payment for Dr. Strangelove",
   "acceptedMethod": {
-    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
+    "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
     "transfer": {
       "amount": "2.99",
       "currency": "USD"
@@ -413,21 +423,20 @@ Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
         </pre>
       </li>
       <li>
-The payment service provider generates a signed payment acknowledgement
+The payment service provider generates a payment acknowledgement
 message, which is a [[!JSON-LD]] object that contains enough information to
 verify that the transaction has completed in success or failure:
         <pre class="example" title="Example of a payment acknowledgement">
 HTTP/1.1 200 OK
 Date: Tue, 07 Jun 2017 20:51:36 GMT
-Content-Type: application/ld+json
+Content-Type: application/json
 Content-Length: 623
 
 {
-  "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentAcknowledgement",
   "description": "Payment to ExampleMerch for widgets",
   "selectedScheme": {
-    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
+    "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
     "status": "authorized",
     "token": "10025AB",
     "transfer": {
@@ -445,14 +454,13 @@ The payment acknowledgement is then relayed back to the <a>payer</a>:
 POST /services/paymentComplete?transaction=923847298 HTTP/1.1
 Host: videos.example.com
 Date: Tue, 07 Jun 2017 20:51:35 GMT
-Content-Type: application/ld+json
+Content-Type: application/json
 
 {
-  "@context": "https://w3id.org/web-payments/v1",
   "type": "PaymentAcknowledgement",
   "description": "Payment to ExampleMerch for widgets",
   "selectedScheme": {
-    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
+    "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
     "status": "authorized",
     "token": "10025AB",
     "transfer": {
@@ -465,8 +473,9 @@ Content-Type: application/ld+json
         </pre>
       </li>
       <li>
-The <a>payee</a> validates the payment acknowledgement, sets the appropriate access
-control for the resource, and re-directs the <a>payer</a> to the resource:
+The <a>payee</a> validates the payment acknowledgement, sets the appropriate
+access control for the resource, and re-directs the <a>payer</a> to the
+resource:
         <pre class="example" title="Payment acknowledgement relayed back to <a>payee</a>">
 HTTP/1.1 302 Found
 Date: Tue, 07 Jun 2017 20:51:36 GMT
@@ -477,48 +486,35 @@ Location: /movies/dr-strangelove
   </section>
 
   <section>
+    <h2>Message Extensibility</h2>
+
+    <p class="issue">
+One proposal for providing message extensibility is to allow messages to
+be interpreted as JSON-LD with a specific context, such as
+<code>https://example.org/contexts/web-payments/v1</code>. Doing this would
+not only solve message versioning, but it would also enable
+decentralized extensibility for all payment messages while ensuring that
+there are no clashes in terminology between industry verticals.
+    </p>
+  </section>
+
+  <section>
     <h2>Security Considerations</h2>
 
     <section>
       <h3>Message Integrity</h3>
-      <p>
-It is possible to sign any JSON-LD based message by using
-Linked Data Signatures, like so:
+      <p class="issue">
+There are a variety of ways that message integrity can be protected. Which
+set of methods will this specification employ.
       </p>
+    </section>
 
-      <pre class="example" title="Example of a signed payment request">
-POST /services/cards/2745023475 HTTP/1.1
-Host: mybank.example.org
-Date: Tue, 07 Jun 2017 20:51:35 GMT
-Accept: application/ld+json
-Authorization: Signature keyId="https://mybank.example.org/people/jane/keys/42",
-   algorithm="rsa-sha256",headers="(request-target) host date",
-   signature="jgSqYK0yKclIHfF9zdApVEbDp5eqj8C4i4X76pE+XHoxugXv7qnVrGR+30bmB
-              gtpR39I4utq17s9ghz/2QFVxlnToYAvbSVZJ9ulLd1HQBugO0jOyn9sXOtcN7
-              uNHBjqNCqUsnt0sw/cJA6B6nJZpyNqNyAXKdxZZItOuhIs78w="
-
-{
-  "@context": "https://w3id.org/web-payments/v1",
-  "type": "PaymentRequest",
-  "description": "Payment for Dr. Strangelove",
-  "acceptedMethod": {
-    "paymentMethod": "https://w3id.org/payment-schemes#Visa",
-    "transfer": {
-      "amount": "2.99",
-      "currency": "USD"
-    },
-    "destination": "20389472398"
-  },
-  "paymentCompleteService": "https://videos.example.com/services/paymentComplete?transaction=923847298",
-  "signature": {
-    "type": "LinkedDataSignature2015",
-    "creator": "https://videos.example.com/keys/14",
-    "created": "2015-09-23T20:21:34Z",
-    "nonce": "239807882930744352",
-    "signatureValue": "OGQzNGVkMzVm4NTIyZTkZ...goYzI43Q3ODIyOWM32NjI="
-  }
-}
-        </pre>
+    <section>
+      <h3>Message Replay</h3>
+      <p class="issue">
+There are a variety of ways that message replay can be protected against. Which
+set of methods will this specification employ.
+      </p>
     </section>
   </section>
 
