@@ -1,5 +1,8 @@
+# Web Payments HTTP API 1.0
 
-# Specification 'webpayments-http-api'
+This document outlines how to register payment apps, request payments,
+and acknowledge payment requests using a standard HTTP API.
 
-This is the repository for webpayments-http-api. You're welcome to contribute! Let's make the Web rock our socks
-off!
+The live version of this specification can be found here:
+
+http://w3c.github.io/webpayments-http-api/
