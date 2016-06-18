@@ -176,41 +176,34 @@ updated to match the
 
   <p>
 The diagram below outlines a basic HTTP client payment flow with no errors.
-The basic flow starts out with the <a>payer</a> accessing a protected resource.
+The basic flow starts out with the <a>payer</a> optionally accessing a
+protected resource and being notified that payment is required.
 The <a>payee</a> provides a URL where a payment request for the resource
 can be fetched. The <a>payer</a> fetches the payment request, selects
 a payment app, and sends the request on to the appropriate
-<a>payment service provider</a> for processing. The
-<a>payment service provider</a> initiates the payment and sends a
-payment response back to the <a>payer</a>. The <a>payer</a>
-then forwards the payment response back to the
-<a>payee</a>. If there are no errors, the <a>payee</a> then grants access to
-the resource that was purchased.
+<a>payment app</a> for processing. The <a>payment app</a> initiates the
+payment and sends a payment response back to the <a>payer</a>.
+The <a>payer</a> then forwards the payment response back to the <a>payee</a>.
+If there are no errors, the <a>payee</a> then grants access to the resource
+that was purchased.
   </p>
+
+  <figure>
+    <img style="margin: auto; display: block;" src="flow-purchase.svg">
+    <figcaption style="text-align: center;">
+- A basic tokenized card payment flow.
+    </figcaption>
+  </figure>
 
   <p class="issue">
-The flow below reflects a fairly advanced tokenized payment scenario. We may
-want to use a simpler basic credit card flow where the customer doesn't have
-a payment service provider and just returns the credit card details to the
-merchant.
+The flow above reflects a tokenized card payment scenario. Is this the right
+scenario to use as an example?
   </p>
 
-  <script type='text/jumly+sequence'>
-@found "Payment Service Provider (customer)"
-@found "Payer client (customer)", ->
-  @message "access resource", "Payee server (merchant)", ->
-    @reply "402 Payment Required", "Payer client (customer)"
-@found "Payer client (customer)", ->
-  @message "GET payment request", "Payee server (merchant)", ->
-    @reply "payment request", "Payer client (customer)"
-@found "Payer client (customer)", ->
-  @message "POST payment request", "Payment Service Provider (customer)", ->
-    @reply "payment response", "Payer client (customer)"
-@found "Payer client (customer)", ->
-  @message "POST payment response", "Payee server (merchant)", ->
-    @message "verification", ->
-      @reply "grant access to resource", "Payer client (customer)"
-  </script>
+</section>
+
+<section>
+  <h2>Detailed Payment Flow</h2>
 
   <p class="issue">
 It may be a good idea to return the payment request with the 402 response.
@@ -385,18 +378,10 @@ Melvin Carvalho has also raised an issue noting that we may not want to use
 402 and the Location header, but rather an additional HTTP header called
 <code>Payment</code> that is compatible with multiple 4xx error conditions.
   </p>
-  <p>
-The diagram below outlines the basic payment flow described above for a
-push-based payment.
-  </p>
-</section>
+ </section>
 
-<section>
-  <h2>Detailed Payment Flow</h2>
-  <p class="issue">
-Describe the payment flow in detail here using Adrian's flow diagram and Ian's
-steps.
-  </p>
+ <section>
+   <h2>Web Payment Operations</h2>
 
   <section>
     <h3>Payment app Registration</h3>
@@ -658,10 +643,6 @@ on this specification: LIST_TBD
   </p>
 
 </section>
-
-<script src='//code.jquery.com/jquery-2.1.3.min.js' class='remove'></script>
-<script src='//coffeescript.org/extras/coffee-script.js' class='remove'></script>
-<script src='http://jumly.tmtk.net/public/jumly.min.js' class='remove'></script>
 
 </body>
 </html>

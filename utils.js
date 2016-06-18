@@ -17,7 +17,7 @@ function restrictReferences(utils, content) {
   });
 
   // add a handler to come in after all the definitions are resolved
-  require(["core/pubsubhub"], function( respecEvents ) {
+  //require(["core/pubsubhub"], function( respecEvents ) {
     respecEvents.sub('end', function(message) {
       if (message == 'core/link-to-dfn') {
         // all definitions are linked
@@ -44,7 +44,7 @@ function restrictReferences(utils, content) {
         });
       }
     });
-  });
+  //});
 
     return (base.innerHTML);
 }
