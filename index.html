@@ -225,7 +225,7 @@ in the <code>Location</code> header in the previous step.
     </li>
     <li>
 The <a>payment mediator</a> scans the list of previously registered <a>payment app</a>s
-and finds matches against <code>acceptedMethods</code> in the
+and finds matches against <code>paymentTerms</code> in the
 payment request.
     </li>
     <li>
@@ -314,7 +314,7 @@ card with embossed PAN and CVV2, or tokenized credit card):
         <li>
 The <a>payment mediator</a> forwards the request on via an HTTP POST
 to the <code>paymentRequestService</code> in the
-<code>acceptedMethod</code> (note that the <a>payee</a>
+<code>paymentTerms</code> (note that the <a>payee</a>
 sets this, not the <a>payment app</a>).
         </li>
       </ol>
@@ -486,9 +486,9 @@ Content-Length: 873
 {
   "type": "PaymentRequest",
   "description": "Payment for Dr. Strangelove",
-  "acceptedMethod": {
+  "paymentTerms": {
     "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
-    "transfer": {
+    "paymentAmount": {
       "amount": "2.99",
       "currency": "USD"
     }
@@ -521,9 +521,9 @@ Accept: application/json
 {
   "type": "PaymentRequest",
   "description": "Payment for Dr. Strangelove",
-  "acceptedMethod": {
+  "paymentTerms": {
     "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
-    "transfer": {
+    "paymentAmount": {
       "amount": "2.99",
       "currency": "USD"
     }
@@ -545,11 +545,11 @@ Content-Length: 623
 {
   "type": "PaymentResponse",
   "description": "Payment to ExampleMerch for widgets",
-  "selectedScheme": {
+  "paymentTerms": {
     "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
     "status": "authorized",
     "token": "10025AB",
-    "transfer": {
+    "paymentAmount": {
       "amount": "2.99",
       "currency": "USD"
     }
@@ -570,11 +570,11 @@ Content-Type: application/json
 {
   "type": "PaymentResponse",
   "description": "Payment to ExampleMerch for widgets",
-  "selectedScheme": {
+  "paymentTerms": {
     "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
     "status": "authorized",
     "token": "10025AB",
-    "transfer": {
+    "paymentAmount": {
       "amount": "2.99",
       "currency": "USD"
     }
