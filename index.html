@@ -189,7 +189,7 @@ that was purchased.
   </p>
 
   <figure>
-    <img style="margin: auto; display: block;" src="flow-purchase.svg">
+    <img style="margin: auto; display: block;" alt="Basic tokenized card payment flow" src="flow-purchase.svg">
     <figcaption style="text-align: center;">
 - A basic tokenized card payment flow.
     </figcaption>
@@ -465,6 +465,12 @@ more flexibility wrt. the location of the payment request service. For example,
 having the Location header enables software developers to split media servers
 from payment processing servers. That said, there are techniques to do this
 today without the extra layer of indirection.
+</div>
+<div class="issue">
+    The model described here does not yet take into account "push" payments.
+    While there is nothing in this design that precludes payments pushed from a
+    payer to a payee, explicit support and an example that illustrates this need
+    to be included in the document.
 </div>
       </li>
       <li>
