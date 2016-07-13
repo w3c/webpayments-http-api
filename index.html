@@ -14,10 +14,10 @@
     <script type="text/javascript" class="remove">
 var respecConfig = {
     // specification status (e.g., WD, LCWD, NOTE, etc.). If in doubt use ED.
-    specStatus:           "ED",
+    specStatus:           "FPWD",
 
     // the specification's short name, as in http://www.w3.org/TR/short-name/
-    shortName:            "web-payments-http-api",
+    shortName:            "payments-http-api",
 
     // if you wish the publication date to be other than today, set this
     // publishDate:  "2009-08-06",
@@ -28,7 +28,7 @@ var respecConfig = {
     // previousMaturity:  "WD",
 
     // if there a publicly available Editor's Draft, this is the link
-    edDraftURI:           "http://w3c.github.io/webpayments-http-api/",
+    edDraftURI:           "https://w3c.github.io/webpayments-http-api/",
 
     // if this is a LCWD, uncomment and set the end of its review period
     // lcEnd: "2009-08-05",
@@ -102,33 +102,23 @@ var respecConfig = {
 <body>
 <section id="abstract">
   <p>
-This document outlines how to register <a>payment app</a>s, request payments,
-and acknowledge payment requests using a standard HTTP API.
+This document outlines how to register payment applications, create
+payment requests, and reply with payment responses using a standard HTTP API.
   </p>
 </section>
 
 <section id="sotd">
 
-  <p>There are a number of ways that one may participate in the development of
-    this specification:</p>
+  <p>
+The most effective way to report issues and request features is to
+engage the working group via the Github
+<a href="https://github.com/w3c/webpayments-http-api/issues/">issue tracker</a>
+for the Working Group. Submitting issues as well as pull requests for
+changes to the specification are encouraged.
+  </p>
 
-  <ul>
-    <li>Ad-hoc technical discussion primarily occurs on the public community mailing list:
-      <a href="http://lists.w3.org/Archives/Public/public-webpayments/">public-webpayments@w3.org</a></li>
-
-    <li><a href="http://payswarm/minutes/">Public Web Payments Community Group teleconferences</a>
-    are held on Wednesdays at 1600UTC every other week.</li>
-
-    <li>Specification bugs and issues should be reported in the
-      <a href="https://github.com/web-payments/web-payments.org/issues">issue tracker</a>
-      if you do not want to send an e-mail to the public-webpayments mailing
-      list.</li>
-
-    <li><a href="https://github.com/web-payments/web-payments.org/tree/master/">Source code</a>
-      for the specification can be found on Github.</li>
-
-  </ul>
 </section>
+
 
 <section class="informative">
   <h1>Introduction</h1>
@@ -156,12 +146,6 @@ server and client that is interested in executing payments.
   </section>
   <section class="normative">
     <h3>Terminology</h3>
-
-  <p class="issue">
-The terminology in this specification's terminology and messages need to be
-updated to match the
-<a href="https://github.com/w3c/webpayments/wiki/A-Payments-Initiation-Architecture-for-the-Web">Payments Architecture document</a>.
-  </p>
 
     <div data-include="//w3c.github.io/webpayments-ig/latest/common/terms.html"
       data-oninclude="restrictReferences">
@@ -196,8 +180,10 @@ that was purchased.
   </figure>
 
   <p class="issue">
-The flow above reflects a tokenized card payment scenario. Is this the right
-scenario to use as an example?
+The flow above reflects a pull-based tokenized card payment scenario. There
+are other flows, like push-based flows, that we may want to demonstrate in
+this specification as well. Is a tokenized pull-based flow the best exemplary
+flow to use when introducing the reader to the HTTP API?
   </p>
 
 </section>
@@ -605,21 +591,14 @@ Location: /movies/dr-strangelove
   <section>
     <h2>Security and Privacy Considerations</h2>
 
-    <section>
-      <h3>Message Integrity</h3>
       <p class="issue">
-There are a variety of ways that message integrity can be protected. Which
-set of methods will this specification employ.
+The Working Group is currently in the early stages of the analysis of the
+security and privacy implications of this specification. The ongoing analysis
+can be accessed via the
+<a href="https://github.com/w3c/webpayments/wiki/Security-and-Privacy-Considerations">
+  Web Payments Working Group Security and Privacy Considerations wiki
+</a>.
       </p>
-    </section>
-
-    <section>
-      <h3>Message Replay</h3>
-      <p class="issue">
-There are a variety of ways that message replay can be protected against. Which
-set of methods will this specification employ.
-      </p>
-    </section>
   </section>
 
 </section>
