@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" typeof="bibo:Document " prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta lang="" property="dc:language" content="en">
+  <style>
+    /*
+
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+
+*/
+    
+    .hljs {
+      display: block;
+      overflow-x: auto;
+      padding: 0.5em;
+      color: #333;
+      background: #f8f8f8;
+    }
+    
+    .hljs-comment,
+    .hljs-quote {
+      color: #998;
+      font-style: italic;
+    }
+    
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-subst {
+      color: #333;
+      font-weight: bold;
+    }
+    
+    .hljs-number,
+    .hljs-literal,
+    .hljs-variable,
+    .hljs-template-variable,
+    .hljs-tag .hljs-attr {
+      color: #008080;
+    }
+    
+    .hljs-string,
+    .hljs-doctag {
+      color: #d14;
+    }
+    
+    .hljs-title,
+    .hljs-section,
+    .hljs-selector-id {
+      color: #900;
+      font-weight: bold;
+    }
+    
+    .hljs-subst {
+      font-weight: normal;
+    }
+    
+    .hljs-type,
+    .hljs-class .hljs-title {
+      color: #458;
+      font-weight: bold;
+    }
+    
+    .hljs-tag,
+    .hljs-name,
+    .hljs-attribute {
+      color: #000080;
+      font-weight: normal;
+    }
+    
+    .hljs-regexp,
+    .hljs-link {
+      color: #009926;
+    }
+    
+    .hljs-symbol,
+    .hljs-bullet {
+      color: #990073;
+    }
+    
+    .hljs-built_in,
+    .hljs-builtin-name {
+      color: #0086b3;
+    }
+    
+    .hljs-meta {
+      color: #999;
+      font-weight: bold;
+    }
+    
+    .hljs-deletion {
+      background: #fdd;
+    }
+    
+    .hljs-addition {
+      background: #dfd;
+    }
+    
+    .hljs-emphasis {
+      font-style: italic;
+    }
+    
+    .hljs-strong {
+      font-weight: bold;
+    }
+  </style>
+  <style>
+    /* --- EXAMPLES --- */
+    
+    div.example-title {
+      min-width: 7.5em;
+      color: #b9ab2d;
+    }
+    
+    div.example-title span {
+      text-transform: uppercase;
+    }
+    
+    aside.example,
+    div.example,
+    div.illegal-example {
+      padding: 0.5em;
+      margin: 1em 0;
+      position: relative;
+      clear: both;
+    }
+    
+    div.illegal-example {
+      color: red
+    }
+    
+    div.illegal-example p {
+      color: black
+    }
+    
+    aside.example,
+    div.example {
+      padding: .5em;
+      border-left-width: .5em;
+      border-left-style: solid;
+      border-color: #e0cb52;
+      background: #fcfaee;
+    }
+    
+    aside.example div.example {
+      border-left-width: .1em;
+      border-color: #999;
+      background: #fff;
+    }
+    
+    aside.example div.example div.example-title {
+      color: #999;
+    }
+  </style>
+  <style>
+    /* --- ISSUES/NOTES --- */
+    
+    div.issue-title,
+    div.note-title,
+    div.ednote-title,
+    div.warning-title {
+      padding-right: 1em;
+      min-width: 7.5em;
+      color: #b9ab2d;
+    }
+    
+    div.issue-title {
+      color: #e05252;
+    }
+    
+    div.note-title,
+    div.ednote-title {
+      color: #2b2;
+    }
+    
+    div.warning-title {
+      color: #f22;
+    }
+    
+    div.issue-title span,
+    div.note-title span,
+    div.ednote-title span,
+    div.warning-title span {
+      text-transform: uppercase;
+    }
+    
+    div.note,
+    div.issue,
+    div.ednote,
+    div.warning {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+    
+    .note> p:first-child,
+    .ednote> p:first-child,
+    .issue> p:first-child,
+    .warning> p:first-child {
+      margin-top: 0
+    }
+    
+    .issue,
+    .note,
+    .ednote,
+    .warning {
+      padding: .5em;
+      border-left-width: .5em;
+      border-left-style: solid;
+    }
+    
+    div.issue,
+    div.note,
+    div.ednote,
+    div.warning {
+      padding: 1em 1.2em 0.5em;
+      margin: 1em 0;
+      position: relative;
+      clear: both;
+    }
+    
+    span.note,
+    span.ednote,
+    span.issue,
+    span.warning {
+      padding: .1em .5em .15em;
+    }
+    
+    .issue {
+      border-color: #e05252;
+      background: #fbe9e9;
+    }
+    
+    .note,
+    .ednote {
+      border-color: #52e052;
+      background: #e9fbe9;
+    }
+    
+    .warning {
+      border-color: #f11;
+      border-width: .2em;
+      border-style: solid;
+      background: #fbe9e9;
+    }
+    
+    .warning-title:before {
+      content: "⚠";
+      /*U+26A0 WARNING SIGN*/
+      font-size: 3em;
+      float: left;
+      height: 100%;
+      padding-right: .3em;
+      vertical-align: top;
+      margin-top: -0.5em;
+    }
+    
+    li.task-list-item {
+      list-style: none;
+    }
+    
+    input.task-list-item-checkbox {
+      margin: 0 0.35em 0.25em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <style id="respec-mainstyle">
+    /*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+    /* Override code highlighter background */
+    
+    .hljs {
+      background: transparent !important;
+    }
+    /* --- INLINES --- */
+    
+    em.rfc2119 {
+      text-transform: lowercase;
+      font-variant: small-caps;
+      font-style: normal;
+      color: #900;
+    }
+    
+    h1 acronym,
+    h2 acronym,
+    h3 acronym,
+    h4 acronym,
+    h5 acronym,
+    h6 acronym,
+    a acronym,
+    h1 abbr,
+    h2 abbr,
+    h3 abbr,
+    h4 abbr,
+    h5 abbr,
+    h6 abbr,
+    a abbr {
+      border: none;
+    }
+    
+    dfn {
+      font-weight: bold;
+    }
+    
+    a.internalDFN {
+      color: inherit;
+      border-bottom: 1px solid #99c;
+      text-decoration: none;
+    }
+    
+    a.externalDFN {
+      color: inherit;
+      border-bottom: 1px dotted #ccc;
+      text-decoration: none;
+    }
+    
+    a.bibref {
+      text-decoration: none;
+    }
+    
+    cite .bibref {
+      font-style: normal;
+    }
+    
+    code {
+      color: #C83500;
+    }
+    /* --- TOC --- */
+    
+    .toc a,
+    .tof a {
+      text-decoration: none;
+    }
+    
+    a .secno,
+    a .figno {
+      color: #000;
+    }
+    
+    ul.tof,
+    ol.tof {
+      list-style: none outside none;
+    }
+    
+    .caption {
+      margin-top: 0.5em;
+      font-style: italic;
+    }
+    /* --- TABLE --- */
+    
+    table.simple {
+      border-spacing: 0;
+      border-collapse: collapse;
+      border-bottom: 3px solid #005a9c;
+    }
+    
+    .simple th {
+      background: #005a9c;
+      color: #fff;
+      padding: 3px 5px;
+      text-align: left;
+    }
+    
+    .simple th[scope="row"] {
+      background: inherit;
+      color: inherit;
+      border-top: 1px solid #ddd;
+    }
+    
+    .simple td {
+      padding: 3px 10px;
+      border-top: 1px solid #ddd;
+    }
+    
+    .simple tr:nth-child(even) {
+      background: #f0f6ff;
+    }
+    /* --- DL --- */
+    
+    .section dd> p:first-child {
+      margin-top: 0;
+    }
+    
+    .section dd> p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .section dd {
+      margin-bottom: 1em;
+    }
+    
+    .section dl.attrs dd,
+    .section dl.eldef dd {
+      margin-bottom: 0;
+    }
+    
+    .respec-hidden {
+      display: none;
+    }
+    
+    @media print {
+      .removeOnSave {
+        display: none;
+      }
+    }
+  </style>
+  <title>Web Payments HTTP API 1.0</title>
+
+  <!--
+      === NOTA BENE ===
+      For the three scripts below, if your spec resides on dev.w3 you can check them
+      out in the same tree and use relative links so that they'll work offline,
+     -->
+
+  <link rel="stylesheet" href="spec.css">
+
+
+  <style>
+    .sequence-diagram {
+      margin: auto;
+    }
+  </style>
+  <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2016/W3C-WD">
+  <!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]-->
+  <script id="initialUserConfig" type="application/json">
+    {
+      "specStatus": "FPWD",
+      "shortName": "payments-http-api",
+      "edDraftURI": "https://w3c.github.io/webpayments-http-api/",
+      "editors": [
+      {
+        "name": "Manu Sporny",
+        "url": "https://manu.sporny.org/",
+        "company": "Digital Bazaar",
+        "companyURL": "http://digitalbazaar.com/"
+      },
+      {
+        "name": "Shane McCarron",
+        "url": "https://github.com/halindrome",
+        "company": "Spec-Ops",
+        "companyURL": "https://www.spec-ops.io/"
+      }],
+      "authors": [
+      {
+        "name": "Manu Sporny",
+        "url": "https://manu.sporny.org/",
+        "company": "Digital Bazaar",
+        "companyURL": "http://digitalbazaar.com/"
+      },
+      {
+        "name": "Dave Longley",
+        "url": "https://github.com/dlongley",
+        "company": "Digital Bazaar",
+        "companyURL": "http://digitalbazaar.com/"
+      }],
+      "wg": "Web Payments Working Group",
+      "wgURI": "https://www.w3.org/Payments/WG/",
+      "wgPublicList": "public-webpayments-comments",
+      "otherLinks": [
+      {
+        "key": "Source control",
+        "data": [
+        {
+          "value": "https://github.com/w3c/webpayments-http-api/",
+          "href": "https://github.com/w3c/webpayments-http-api/"
+        }]
+      },
+      {
+        "key": "Issue Tracker",
+        "data": [
+        {
+          "value": "https://github.com/w3c/webpayments-http-api/issues/",
+          "href": "https://github.com/w3c/webpayments-http-api/issues/"
+        }]
+      }],
+      "wgPatentURI": "https://www.w3.org/2004/01/pp-impl/83744/status",
+      "maxTocLevel": 4,
+      "preProcess": []
+    }
+  </script>
+</head>
+
+<body class="h-entry" role="document" id="respecDocument">
+  <div class="head" role="contentinfo" id="respecHeader">
+    <p>
+      <a class="logo" href="http://www.w3.org/"><img width="72" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" alt="W3C"></a>
+    </p>
+    <h1 class="title p-name" id="title" property="dcterms:title">Web Payments HTTP API 1.0</h1>
+    <h2 id="w3c-first-public-working-draft-12-july-2016"><abbr title="World Wide Web Consortium">W3C</abbr> First Public Working Draft <time property="dcterms:issued" class="dt-published" datetime="2016-07-12">12 July 2016</time></h2>
+    <dl>
+      <dt>This version:</dt>
+      <dd><a class="u-url" href="http://www.w3.org/TR/2016/WD-payments-http-api-20160712/">http://www.w3.org/TR/2016/WD-payments-http-api-20160712/</a></dd>
+      <dt>Latest published version:</dt>
+      <dd><a href="http://www.w3.org/TR/payments-http-api/">http://www.w3.org/TR/payments-http-api/</a></dd>
+      <dt>Latest editor's draft:</dt>
+      <dd><a href="https://w3c.github.io/webpayments-http-api/">https://w3c.github.io/webpayments-http-api/</a></dd>
+      <dt>Editors:</dt>
+      <dd class="p-author h-card vcard" property="bibo:editor" resource="_:editor0"><span property="rdf:first" typeof="foaf:Person"><meta property="foaf:name" content="Manu Sporny"><a class="u-url url p-name fn" property="foaf:homepage" href="https://manu.sporny.org/">Manu Sporny</a>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://digitalbazaar.com/">Digital Bazaar</a></span>
+        <span property="rdf:rest" resource="_:editor1"></span>
+      </dd>
+      <dd class="p-author h-card vcard" resource="_:editor1"><span property="rdf:first" typeof="foaf:Person"><meta property="foaf:name" content="Shane McCarron"><a class="u-url url p-name fn" property="foaf:homepage" href="https://github.com/halindrome">Shane McCarron</a>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="https://www.spec-ops.io/">Spec-Ops</a></span>
+        <span property="rdf:rest" resource="rdf:nil"></span>
+      </dd>
+
+      <dt>Authors:</dt>
+      <dd class="p-author h-card vcard"><span property="dc:contributor" typeof="foaf:Person"><meta property="foaf:name" content="Manu Sporny"><a class="u-url url p-name fn" property="foaf:homepage" href="https://manu.sporny.org/">Manu Sporny</a>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://digitalbazaar.com/">Digital Bazaar</a></span>
+      </dd>
+      <dd class="p-author h-card vcard"><span property="dc:contributor" typeof="foaf:Person"><meta property="foaf:name" content="Dave Longley"><a class="u-url url p-name fn" property="foaf:homepage" href="https://github.com/dlongley">Dave Longley</a>, <a property="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://digitalbazaar.com/">Digital Bazaar</a></span>
+      </dd>
+
+      <dt>Source control:</dt>
+      <dd>
+        <a href="https://github.com/w3c/webpayments-http-api/">
+                      https://github.com/w3c/webpayments-http-api/
+                    </a>
+      </dd>
+      <dt>Issue Tracker:</dt>
+      <dd>
+        <a href="https://github.com/w3c/webpayments-http-api/issues/">
+                      https://github.com/w3c/webpayments-http-api/issues/
+                    </a>
+      </dd>
+    </dl>
+    <p class="copyright">
+      <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2016
+
+      <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>,
+      <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>,
+      <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>).
+      <abbr title="World Wide Web Consortium">W3C</abbr> <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>,
+      <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and
+      <a rel="license" href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.
+    </p>
+    <hr title="Separator for header">
+  </div>
+
+  <section id="abstract" class="introductory" property="dc:abstract">
+    <h2 id="h-abstract" resource="#h-abstract"><span property="xhv:role" resource="xhv:heading">Abstract</span></h2>
+    <p>
+      This document outlines how to register payment applications, create payment requests, and reply with payment responses using a standard HTTP API.
+    </p>
+  </section>
+
+  <section id="sotd" class="introductory">
+    <h2 id="h-sotd" resource="#h-sotd"><span property="xhv:role" resource="xhv:heading">Status of This Document</span></h2>
+    <p>
+      <em>This section describes the status of this document at the time of its publication. Other documents may supersede this document. A list of current <abbr title="World Wide Web Consortium">W3C</abbr> publications and the latest revision of this technical report can be found in the <a href="http://www.w3.org/TR/"><abbr title="World Wide Web Consortium">W3C</abbr> technical reports index</a> at http://www.w3.org/TR/.</em>
+    </p>
+
+
+    <p>
+      The most effective way to report issues and request features is to engage the working group via the Github
+      <a href="https://github.com/w3c/webpayments-http-api/issues/">issue tracker</a> for the Working Group. Submitting issues as well as pull requests for changes to the specification are encouraged.
+    </p>
+
+
+    <p>
+      This document was published by the <a href="https://www.w3.org/Payments/WG/">Web Payments Working Group</a> as a First Public Working Draft. This document is intended to become a <abbr title="World Wide Web Consortium">W3C</abbr> Recommendation. If you wish to make comments regarding this document, please send them to
+      <a href="mailto:public-webpayments-comments@w3.org">public-webpayments-comments@w3.org</a> (<a href="mailto:public-webpayments-comments-request@w3.org?subject=subscribe">subscribe</a>,
+      <a href="http://lists.w3.org/Archives/Public/public-webpayments-comments/">archives</a>). All comments are welcome.
+    </p>
+    <p>
+      Publication as a First Public Working Draft does not imply endorsement by the <abbr title="World Wide Web Consortium">W3C</abbr> Membership. This is a draft document and may be updated, replaced or obsoleted by other documents at any time. It is inappropriate to cite this document as other than work in progress.
+    </p>
+    <p>
+      This document was produced by a group operating under the
+      <a id="sotd_patent" property="w3p:patentRules" href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 <abbr title="World Wide Web Consortium">W3C</abbr> Patent
+              Policy</a>.
+      <abbr title="World Wide Web Consortium">W3C</abbr> maintains a <a href="https://www.w3.org/2004/01/pp-impl/83744/status" rel="disclosure">public list of any patent
+                disclosures</a> made in connection with the deliverables of the group; that page also includes instructions for disclosing a patent. An individual who has actual knowledge of a patent which the individual believes contains
+      <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential
+              Claim(s)</a> must disclose the information in accordance with
+      <a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section
+              6 of the <abbr title="World Wide Web Consortium">W3C</abbr> Patent Policy</a>.
+    </p>
+    <p>This document is governed by the <a id="w3c_process_revision" href="http://www.w3.org/2015/Process-20150901/">1 September 2015 <abbr title="World Wide Web Consortium">W3C</abbr> Process Document</a>.
+    </p>
+
+  </section>
+  <nav id="toc">
+    <h2 class="introductory" id="table-of-contents" resource="#table-of-contents"><span property="xhv:role" resource="xhv:heading">Table of Contents</span></h2>
+    <ul class="toc" role="directory">
+      <li class="tocline"><a href="#introduction" class="tocxref"><span class="secno">1. </span>Introduction</a>
+        <ul class="toc">
+          <li class="tocline"><a href="#how-to-read-this-document" class="tocxref"><span class="secno">1.1 </span>How to Read this Document</a></li>
+          <li class="tocline"><a href="#terminology" class="tocxref"><span class="secno">1.2 </span>Terminology</a></li>
+        </ul>
+      </li>
+      <li class="tocline"><a href="#payment-flow-overview" class="tocxref"><span class="secno">2. </span>Payment Flow Overview</a></li>
+      <li class="tocline"><a href="#detailed-payment-flow" class="tocxref"><span class="secno">3. </span>Detailed Payment Flow</a></li>
+      <li class="tocline"><a href="#web-payment-operations" class="tocxref"><span class="secno">4. </span>Web Payment Operations</a>
+        <ul class="toc">
+          <li class="tocline"><a href="#payment-app-registration" class="tocxref"><span class="secno">4.1 </span>Payment app Registration</a></li>
+          <li class="tocline"><a href="#initiating-a-payment-request" class="tocxref"><span class="secno">4.2 </span>Initiating a Payment Request</a></li>
+          <li class="tocline"><a href="#generating-a-payment-response" class="tocxref"><span class="secno">4.3 </span>Generating a Payment Response</a></li>
+          <li class="tocline"><a href="#security-and-privacy-considerations" class="tocxref"><span class="secno">4.4 </span>Security and Privacy Considerations</a></li>
+        </ul>
+      </li>
+      <li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">A. </span>Acknowledgements</a></li>
+    </ul>
+  </nav>
+
+
+
+
+  <section class="informative" id="introduction" typeof="bibo:Chapter" resource="#introduction" property="bibo:hasPart">
+    <!--OddPage-->
+    <h2 id="h-introduction" resource="#h-introduction"><span property="xhv:role" resource="xhv:heading"><span class="secno">1. </span>Introduction</span></h2>
+    <p><em>This section is non-normative.</em></p>
+
+    <p>
+      This HTTP API enables a web application to initiate payment for a product or service by responding with an HTTP 402 Payment Required response and enough data to initiate and complete a payment flow. The implementation of this feature is expected to be implemented by any HTTP server and client that is interested in executing payments.
+    </p>
+
+    <section class="informative" id="how-to-read-this-document" typeof="bibo:Chapter" resource="#how-to-read-this-document" property="bibo:hasPart">
+      <h3 id="h-how-to-read-this-document" resource="#h-how-to-read-this-document"><span property="xhv:role" resource="xhv:heading"><span class="secno">1.1 </span>How to Read this Document</span></h3>
+      <p><em>This section is non-normative.</em></p>
+
+      <p>This document is a detailed specification for a HyperText Transfer Protocol application programming interface (HTTP API) for executing payments via an HTTP client and server. The document is primarily intended for the following audiences:
+      </p>
+
+      <ul>
+        <li>Software developers who want to understand the design decisions and algorithms behind the API.</li>
+        <li>Software developers who want to implement the API.</li>
+      </ul>
+    </section>
+
+    <section class="normative" id="terminology" typeof="bibo:Chapter" resource="#terminology" property="bibo:hasPart">
+      <h3 id="h-terminology" resource="#h-terminology"><span property="xhv:role" resource="xhv:heading"><span class="secno">1.2 </span>Terminology</span></h3>
+
+      <div>
+        <p>
+          This document attempts to communicate the concepts outlined in the Web Payments space by using specific terms to discuss particular concepts. This terminology is included below and linked to throughout the document to aid the reader:
+        </p>
+
+        <dl class="termlist" id="terms">
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt><dfn id="dfn-payee" data-dfn-type="dfn">payee</dfn></dt>
+
+          <dd>An entity that receives funds as required by a transaction.</dd>
+
+          <dt><dfn id="dfn-payer" data-dfn-type="dfn">payer</dfn></dt>
+
+          <dd>An entity that provides a source of funds as required by a transaction.
+          </dd>
+
+          <dt><dfn id="dfn-payment" data-dfn-type="dfn">payment</dfn></dt>
+
+          <dd>[ECB] in a strict sense, a payment is a transfer of funds which discharges an obligation on the part of a payer vis-a-vis a payee. However, in a technical or statistical sense, it is often used as a synonym for transfer order</dd>
+
+          <dt><dfn id="dfn-payment-app" data-dfn-type="dfn">payment app</dfn></dt>
+
+          <dd>A payment app is a component able to process a <a href="#dfn-payment-request" class="internalDFN" data-link-type="dfn">payment
+  request</a> and return a <a href="#dfn-payment-response" class="internalDFN" data-link-type="dfn">payment response</a>.</dd>
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt><dfn id="dfn-payment-mediator" data-dfn-type="dfn">payment mediator</dfn></dt>
+
+          <dd>[EXPERIMENTAL] The payment mediator fulfills a number of roles:
+
+            <ul>
+              <li>
+                It helps determine which payer payment apps can be used to fulfill the payment request given the payee's accepted payment methods.
+              </li>
+              <li>
+                It helps the payer choose a payment app (typically with explicit interaction or prior consent).
+              </li>
+              <li>
+                It passes payment request data to the payer's selected payment app.
+              </li>
+            </ul>
+
+            A payment mediator thus co-ordinates the flow of messages between the payee, payer, and selected payment app.
+          </dd>
+
+          <dt><dfn id="dfn-payment-method" data-dfn-type="dfn">payment method</dfn></dt>
+
+          <dd>[EXPERIMENTAL] A way of paying. A system and set of rules for payments. A payment app may support one or more payment methods. For example, Visa, Mastercard, American Express, bobspay.com are payment methods.</dd>
+
+          <dt><dfn id="dfn-payment-method-data" data-dfn-type="dfn">payment method data</dfn></dt>
+
+          <dd>[EXPERIMENTAL] The data describing an instance of a payment method. For example, for the Visa payment method this might be the card primary account number (PAN), expiry date, and CVV.</dd>
+
+          <dt><dfn id="dfn-payment-method-identifier" data-dfn-type="dfn">
+  payment method identifier</dfn></dt>
+
+          <dd>A string that uniquely identifies a <a href="#dfn-payment-method" class="internalDFN" data-link-type="dfn">payment method</a> that a user can use to complete a transaction.</dd>
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt><dfn id="dfn-payment-request" data-dfn-type="dfn">payment request</dfn></dt>
+
+          <dd>A request from a <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a> to be paid. It contains the details of what to pay and how the payment can be made. How the payment can be made is specified as a list of <a href="#dfn-payment-method-identifier" class="internalDFN" data-link-type="dfn">payment method
+  identifiers</a>. The payment request <em class="rfc2119" title="MUST">MUST</em> contain all of the
+            <a href="#dfn-payment-method-data" class="internalDFN" data-link-type="dfn">payment method data</a> required for each <a href="#dfn-payment-method" class="internalDFN" data-link-type="dfn">payment method</a> identified in it's set of supported payment methods.</dd>
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt><dfn id="dfn-payment-response" data-dfn-type="dfn">payment response</dfn></dt>
+
+          <dd>A response to a <a href="#dfn-payment-request" class="internalDFN" data-link-type="dfn">payment request</a> (normally the result of processing by a <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a>). The content of a payment response will be dependant on how the <a href="#dfn-payment" class="internalDFN" data-link-type="dfn">payment</a> is being processed.
+          </dd>
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+
+          <dt></dt>
+
+
+        </dl>
+      </div>
+
+    </section>
+
+  </section>
+
+  <section id="payment-flow-overview" typeof="bibo:Chapter" resource="#payment-flow-overview" property="bibo:hasPart">
+    <!--OddPage-->
+    <h2 id="h-payment-flow-overview" resource="#h-payment-flow-overview"><span property="xhv:role" resource="xhv:heading"><span class="secno">2. </span>Payment Flow Overview</span></h2>
+
+    <p>
+      The diagram below outlines a basic HTTP client payment flow with no errors. The basic flow starts out with the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a> optionally accessing a protected resource and being notified that payment is required. The <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a> provides a URL where a payment request for the resource can be fetched. The <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a> fetches the payment request, selects a payment app, and sends the request on to the appropriate
+      <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> for processing. The <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> initiates the payment and sends a payment response back to the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a>. The <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a> then forwards the payment response back to the <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a>. If there are no errors, the <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a> then grants access to the resource that was purchased.
+    </p>
+
+    <figure id="fig-a-basic-tokenized-card-payment-flow.x">
+      <img style="margin: auto; display: block;" alt="Basic tokenized card payment flow" src="flow-purchase.svg">
+      <figcaption style="text-align: center;">Fig. <span class="figno">1</span> <span class="fig-title">
+- A basic tokenized card payment flow.
+    </span></figcaption>
+    </figure>
+
+    <div class="issue" id="issue-1">
+      <div class="issue-title marker" aria-level="3" role="heading" id="h-issue1"><span>Issue 1</span></div>
+      <p class="">
+        The flow above reflects a pull-based tokenized card payment scenario. There are other flows, like push-based flows, that we may want to demonstrate in this specification as well. Is a tokenized pull-based flow the best exemplary flow to use when introducing the reader to the HTTP API?
+      </p>
+    </div>
+
+  </section>
+
+  <section id="detailed-payment-flow" typeof="bibo:Chapter" resource="#detailed-payment-flow" property="bibo:hasPart">
+    <!--OddPage-->
+    <h2 id="h-detailed-payment-flow" resource="#h-detailed-payment-flow"><span property="xhv:role" resource="xhv:heading"><span class="secno">3. </span>Detailed Payment Flow</span></h2>
+
+    <div class="issue" id="issue-2">
+      <div class="issue-title marker" aria-level="3" role="heading" id="h-issue2"><span>Issue 2</span></div>
+      <p class="">
+        It may be a good idea to return the payment request with the 402 response. The concern is that this would be a misrepresentation of the resource. The counter-argument is that a client shouldn't interpret a 402 response as the resource, and since 402 has not been formally defined yet, we could define it to always come with a payment request response.
+      </p>
+    </div>
+
+    <ol class="algorithm">
+      <li>
+        The <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a>'s web page requests payment by responding with a 402 Payment Required response code and a URL encoded in the <code>Location</code> header to fetch the <code>request</code> from.
+      </li>
+      <li>
+        The <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> fetches the <code>request</code> from the URL specified in the <code>Location</code> header in the previous step.
+      </li>
+      <li>
+        The <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> scans the list of previously registered <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a>s and finds matches against <code>paymentTerms</code> in the payment request.
+      </li>
+      <li>
+        A <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> is selected by the <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> or the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a>. The process <em class="rfc2119" title="MAY">MAY</em> consist of one or more of the following steps:
+
+        <div class="issue" id="issue-3">
+          <div class="issue-title marker" aria-level="3" role="heading" id="h-issue3"><span>Issue 3</span></div>
+          <div class="">
+            This payment app selection process should probably be moved out into a separate
+            <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> specification and referenced from this specification.
+          </div>
+        </div>
+
+        <ol class="algorithm">
+          <li>
+            If there is only one app that matches, that is automatically set to the <em>selected <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a></em>.
+          </li>
+          <li>
+            If there is a pre-existing preference set by the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a> that narrows the selection of the <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> to one match, the match is set to the
+            <em>selected <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a></em>.
+          </li>
+          <li>
+            If there is more than one potential match, the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a> is asked which app they would like to use and the selection is set to the
+            <em>selected <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a></em>
+          </li>
+          <li>
+            If there are no matches, the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a> is notified and may be taken to an alternate flow where a matching <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> is acquired.
+          </li>
+        </ol>
+      </li>
+      <li>
+        If the <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> does not require the payment flow to switch to a 3rd party payment processor (e.g., cryptocurrency), then the payment response is generated locally and the payee's software is notified.
+
+        <div class="issue" id="issue-4">
+          <div class="issue-title marker" aria-level="3" role="heading" id="h-issue4"><span>Issue 4</span></div>
+          <div class="">
+            Steps 5, 6, and 7 are intended to provide for various flows envisioned by the Web Payments ecosystem. This algorithm is merely a starting point, is very much a work in progress, and is not asserted to be correct at present:
+
+            <ol style="border-left: 0px;" class="clear-algorithm">
+              <li>
+                Let "selectedApp" be the payment app selected by the payment mediator.
+              </li>
+              <li>
+                Let "selectedMethod" be the payment method provided by the payee and selected by the payer.
+              </li>
+              <li>
+                If selectedMethod.paymentRequestService exists, re-direct the user there (payee-based PSP).
+              </li>
+              <li>
+                If selectedApp.paymentRequestService exists, re-direct the user there (payer-based PSP).
+              </li>
+              <li>
+                Otherwise, the payment response can be generated locally (local PSP - Bitcoin and others).
+              </li>
+            </ol>
+
+          </div>
+        </div>
+      </li>
+      <li>
+        If the app requires the payment flow to switch to a 3rd party payer payment processor (e.g., push-payment like a PayPal/Google Wallet-like app, ACH, ISO20022 style app):
+        <ol class="algorithm">
+          <li>
+            The <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> forwards the <code>request</code>, via an HTTP POST to the
+            <code>paymentRequestService</code> in the <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> for approval.
+          </li>
+        </ol>
+      </li>
+      <li>
+        If the app requires the payment flow to switch to a 3rd party payee payment processor (e.g., pull-payment like non-EMV magstripe credit card with embossed PAN and CVV2, or tokenized credit card):
+        <ol class="algorithm">
+          <li>
+            The <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> forwards the request on via an HTTP POST to the <code>paymentRequestService</code> in the
+            <code>paymentTerms</code> (note that the <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a> sets this, not the <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a>).
+          </li>
+        </ol>
+      </li>
+      <li>
+        The payment flow is then transferred to the entity that is going to generate the <em>payment acknowledgment</em> (locally installed payment app, <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a>'s payment service provider, or <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a>'s payment service provider).
+      </li>
+      <li>
+        Once the entity in control of the payment flow finalizes the
+        <em>payment response</em>, even if the message is to acknowledge that the payment failed, the <em>payment response</em> is generated and the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a>'s <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> is notified via an HTTP 200 success code.
+
+        <div class="issue" id="issue-5">
+          <div class="issue-title marker" aria-level="3" role="heading" id="h-issue5"><span>Issue 5</span></div>
+          <div class="">
+            Returning an HTTP status code of 200 when a payment fails is controversial. The current thinking seems to be that 200 is the right thing to do as the message was processed successfully (that's what the 200 is referring to). The result of processing the message, however, has nuance that may be dependent on the payment method used. As a thought experiment, what should the HTTP response code be in the following cases:
+
+            <ol style="border-left: 0px;" class="clear-algorithm">
+              <li>
+                Funds transfer was initiated and completed. Clearly 200, right?
+              </li>
+              <li>
+                Funds transfer was initiated, but network delay may cause it to fail at a later point in time (ACH, etc.). 102 or 202?
+              </li>
+              <li>
+                Request for subscription was noted and is setup, but no funds were moved. 200?
+              </li>
+              <li>
+                Payment submitted to network, but network didn't respond with an auth code. 504?
+              </li>
+              <li>
+                Cryptocurrency payment was submitted to network but a fork has been detected and it is unclear if we're on the winning or losing fork. 102 or 202?
+              </li>
+
+            </ol>
+
+            There are not enough HTTP status codes to try and enumerate the nuanced potential outcomes so the best we can do at present (it seems) is to just report on whether or not the payment request was processed successfully or not and let the payee determine if the outcome of the transaction was valid from their viewpoint. In many nuanced cases, it's up to the payer to decide if it was "successful" or not (like waiting on a certain number of acknowledgments from a blockchain, for example).
+          </div>
+        </div>
+      </li>
+    </ol>
+    <div class="issue" id="issue-6">
+      <div class="issue-title marker" aria-level="3" role="heading" id="h-issue6"><span>Issue 6</span></div>
+      <p class="">
+        Melvin Carvalho has also raised an issue noting that we may not want to use 402 and the Location header, but rather an additional HTTP header called
+        <code>Payment</code> that is compatible with multiple 4xx error conditions.
+      </p>
+    </div>
+  </section>
+
+  <section id="web-payment-operations" typeof="bibo:Chapter" resource="#web-payment-operations" property="bibo:hasPart">
+    <!--OddPage-->
+    <h2 id="h-web-payment-operations" resource="#h-web-payment-operations"><span property="xhv:role" resource="xhv:heading"><span class="secno">4. </span>Web Payment Operations</span></h2>
+
+    <section id="payment-app-registration" typeof="bibo:Chapter" resource="#payment-app-registration" property="bibo:hasPart">
+      <h3 id="h-payment-app-registration" resource="#h-payment-app-registration"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.1 </span>Payment app Registration</span></h3>
+      <ol>
+        <li>
+          The <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a>'s HTTP client navigates to a payment service provider website and authenticates itself to fetch a <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> to register:
+          <div class="example">
+            <div class="example-title marker"><span>Example 1</span><span style="text-transform: none">: Authenticated GET of <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a></span></div><pre class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/apps/visa</span> HTTP/1.1
+<span class="hljs-attribute">Host</span>: mybank.example.org
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 20:51:35 GMT
+<span class="hljs-attribute">Accept</span>: application/json
+<span class="hljs-attribute">Authorization</span>: Digest username="jdoe", realm="jane@mybank.example.org", ...</pre></div>
+          <div class="issue" id="issue-7">
+            <div class="issue-title marker" aria-level="4" role="heading" id="h-issue7"><span>Issue 7</span></div>
+            <div class="">
+              While digest authentication is used above, more advanced authentication schemes may also be employed. For example, the mechanism below uses HTTP Signatures and public/private key cryptography to authenticate the client with the server:
+              <div class="example">
+                <div class="example-title marker"><span>Example 2</span><span style="text-transform: none">: Authenticated GET of <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> using HTTP Signatures</span></div><pre class="hljs xquery">GET /apps/visa HTTP/<span class="hljs-number">1.1</span>
+Host: mybank.example.org
+Date: Tue, <span class="hljs-number">07</span> Jun <span class="hljs-number">2017</span> <span class="hljs-number">20</span>:<span class="hljs-number">51</span>:<span class="hljs-number">35</span> GMT
+Accept: application/json
+Authorization: Signature keyId=<span class="hljs-string">"https://mybank.example.org/people/jane/keys/42"</span>,
+   algorithm=<span class="hljs-string">"rsa-sha256"</span>,headers=<span class="hljs-string">"(request-target) host date"</span>,
+   signature=<span class="hljs-string">"jgSqYK0yKclIHfF9zdApVEbDp5eqj8C4i4X76pE+XHoxugXv7qnVrGR+30bmB
+              gtpR39I4utq17s9ghz/2QFVxlnToYAvbSVZJ9ulLd1HQBugO0jOyn9sXOtcN7
+              uNHBjqNCqUsnt0sw/cJA6B6nJZpyNqNyAXKdxZZItOuhIs78w="</span></pre></div>
+            </div>
+          </div>
+        </li>
+        <li>
+          The payment service provider <em class="rfc2119" title="MUST">MUST</em> respond with the <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> or an HTTP error code. If successful, something like the following will be returned:
+          <div class="example">
+            <div class="example-title marker"><span>Example 3</span><span style="text-transform: none">: Successful retrieval of <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a></span></div><pre class="hljs http">HTTP/1.1 <span class="hljs-number">200</span> OK
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 20:51:36 GMT
+<span class="hljs-attribute">Content-Type</span>: application/json
+<span class="hljs-attribute">Content-Length</span>: 412
+
+<span class="xquery">{
+  <span class="hljs-string">"type"</span>: <span class="hljs-string">"PaymentApp"</span>,
+  <span class="hljs-string">"paymentMethod"</span>: <span class="hljs-string">"https://payments.example.org/payment-schemes#Visa"</span>,
+  <span class="hljs-string">"label"</span>: <span class="hljs-string">"ExampleBank Visa Card"</span>,
+  <span class="hljs-string">"paymentRequestService"</span>: <span class="hljs-string">"https://mybank.example.org/services/cards/2745023475"</span>
+}</span></pre></div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="initiating-a-payment-request" typeof="bibo:Chapter" resource="#initiating-a-payment-request" property="bibo:hasPart">
+      <h3 id="h-initiating-a-payment-request" resource="#h-initiating-a-payment-request"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.2 </span>Initiating a Payment Request</span></h3>
+      <ol>
+        <li>
+          The <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a>'s HTTP client accesses a resource that requires payment:
+          <div class="example">
+            <div class="example-title marker"><span>Example 4</span><span style="text-transform: none">: Payer requests a resource that requires a payment</span></div><pre class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/movies/dr-strangelove</span> HTTP/1.1
+<span class="hljs-attribute">Host</span>: videos.example.com
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 21:31:35 GMT</pre></div>
+        </li>
+        <li>
+          The <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a>'s HTTP server responds with a 402 Payment Required response and the URL where the payment request may be fetched via the
+          <code>Location</code> header:
+          <div class="example">
+            <div class="example-title marker"><span>Example 5</span><span style="text-transform: none">: Payee responds with 402 Payment Required</span></div><pre class="hljs http">HTTP/1.1 <span class="hljs-number">402</span> Payment Required
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 21:31:36 GMT
+<span class="hljs-attribute">Location</span>: https://videos.example.com/payment-requests/dr-strangelove</pre></div>
+
+          <div class="issue" id="issue-8">
+            <div class="issue-title marker" aria-level="4" role="heading" id="h-issue8"><span>Issue 8</span></div>
+            <div class="">
+              It's currently not clear if having an extra round-trip (steps 2 and 3) is beneficial. The alternative is to respond with an HTTP 402 and the payment request (step 4) when the GET for the initial resource is performed. This removes the need to do an extra GET at the expense of providing a little more flexibility wrt. the location of the payment request service. For example, having the Location header enables software developers to split media servers from payment processing servers. That said, there are techniques to do this today without the extra layer of indirection.
+            </div>
+          </div>
+          <div class="issue" id="issue-9">
+            <div class="issue-title marker" aria-level="4" role="heading" id="h-issue9"><span>Issue 9</span></div>
+            <div class="">
+              The model described here does not yet take into account "push" payments. While there is nothing in this design that precludes payments pushed from a payer to a payee, explicit support and an example that illustrates this need to be included in the document.
+            </div>
+          </div>
+        </li>
+        <li>
+          The <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a>'s HTTP client accesses the payment request resource:
+          <div class="example">
+            <div class="example-title marker"><span>Example 6</span><span style="text-transform: none">: Payer requests a payment request</span></div><pre class="hljs http"><span class="hljs-keyword">GET</span> <span class="hljs-string">/payment-requests/dr-strangelove</span> HTTP/1.1
+<span class="hljs-attribute">Host</span>: videos.example.com
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 21:31:37 GMT</pre></div>
+        </li>
+        <li>
+          The <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a> server provides the payment request.
+          <div class="example">
+            <div class="example-title marker"><span>Example 7</span><span style="text-transform: none">: Payee provides the payment request</span></div><pre class="hljs http">HTTP/1.1 <span class="hljs-number">200</span> OK
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 21:31:38 GMT
+<span class="hljs-attribute">Content-Type</span>: application/json
+<span class="hljs-attribute">Content-Length</span>: 873
+
+<span class="xquery">{
+  <span class="hljs-string">"type"</span>: <span class="hljs-string">"PaymentRequest"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Payment for Dr. Strangelove"</span>,
+  <span class="hljs-string">"paymentTerms"</span>: {
+    <span class="hljs-string">"paymentMethod"</span>: <span class="hljs-string">"https://payments.example.org/payment-schemes#Visa"</span>,
+    <span class="hljs-string">"paymentAmount"</span>: {
+      <span class="hljs-string">"amount"</span>: <span class="hljs-string">"2.99"</span>,
+      <span class="hljs-string">"currency"</span>: <span class="hljs-string">"USD"</span>
+    }
+  },
+  <span class="hljs-string">"paymentCompleteService"</span>: <span class="hljs-string">"https://videos.example.com/services/paymentComplete?transaction=923847298"</span>
+}</span></pre></div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="generating-a-payment-response" typeof="bibo:Chapter" resource="#generating-a-payment-response" property="bibo:hasPart">
+      <h3 id="h-generating-a-payment-response" resource="#h-generating-a-payment-response"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.3 </span>Generating a Payment Response</span></h3>
+      <ol>
+        <li>
+          A <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> is selected by the <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> to process the payment request generated in the previous section.
+        </li>
+        <li>
+          The <code>paymentRequestService</code> URL, provided in the <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> or the payment request, is used as the HTTP POST endpoint. The payment service provider that is providing the <a href="#dfn-payment-app" class="internalDFN" data-link-type="dfn">payment app</a> interface receives the payment request, authenticates the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a>, and proceeds with the payment:
+          <div class="example">
+            <div class="example-title marker"><span>Example 8</span><span style="text-transform: none">: The payment request is POSTed by the payment mediator for processing at the payment app</span></div><pre class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/services/cards/2745023475</span> HTTP/1.1
+<span class="hljs-attribute">Host</span>: mybank.example.org
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 20:51:35 GMT
+<span class="hljs-attribute">Accept</span>: application/json
+
+<span class="xquery">{
+  <span class="hljs-string">"type"</span>: <span class="hljs-string">"PaymentRequest"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Payment for Dr. Strangelove"</span>,
+  <span class="hljs-string">"paymentTerms"</span>: {
+    <span class="hljs-string">"paymentMethod"</span>: <span class="hljs-string">"https://payments.example.org/payment-schemes#Visa"</span>,
+    <span class="hljs-string">"paymentAmount"</span>: {
+      <span class="hljs-string">"amount"</span>: <span class="hljs-string">"2.99"</span>,
+      <span class="hljs-string">"currency"</span>: <span class="hljs-string">"USD"</span>
+    }
+  },
+  <span class="hljs-string">"paymentCompleteService"</span>: <span class="hljs-string">"https://videos.example.com/services/paymentComplete?transaction=923847298"</span>
+}</span></pre></div>
+        </li>
+        <li>
+          The payment service provider generates a payment response message that contains enough information to verify that the transaction has completed in success or failure:
+          <div class="example">
+            <div class="example-title marker"><span>Example 9</span><span style="text-transform: none">: The payment response is provided back to the payment mediator from the payment app</span></div><pre class="hljs http">HTTP/1.1 <span class="hljs-number">200</span> OK
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 20:51:36 GMT
+<span class="hljs-attribute">Content-Type</span>: application/json
+<span class="hljs-attribute">Content-Length</span>: 623
+
+<span class="xquery">{
+  <span class="hljs-string">"type"</span>: <span class="hljs-string">"PaymentResponse"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Payment to ExampleMerch for widgets"</span>,
+  <span class="hljs-string">"paymentTerms"</span>: {
+    <span class="hljs-string">"paymentMethod"</span>: <span class="hljs-string">"https://payments.example.org/payment-schemes#Visa"</span>,
+    <span class="hljs-string">"status"</span>: <span class="hljs-string">"authorized"</span>,
+    <span class="hljs-string">"token"</span>: <span class="hljs-string">"10025AB"</span>,
+    <span class="hljs-string">"paymentAmount"</span>: {
+      <span class="hljs-string">"amount"</span>: <span class="hljs-string">"2.99"</span>,
+      <span class="hljs-string">"currency"</span>: <span class="hljs-string">"USD"</span>
+    }
+  }
+}</span></pre></div>
+        </li>
+        <li>
+          The payment response is then relayed back to the <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a> by the
+          <a href="#dfn-payment-mediator" class="internalDFN" data-link-type="dfn">payment mediator</a> using the <code>paymentCompleteService</code> URL provided in the initial payment request:
+          <div class="example">
+            <div class="example-title marker"><span>Example 10</span><span style="text-transform: none">: The payment response is relayed back to the payee by the payment mediator</span></div><pre class="hljs http"><span class="hljs-keyword">POST</span> <span class="hljs-string">/services/paymentComplete?transaction=923847298</span> HTTP/1.1
+<span class="hljs-attribute">Host</span>: videos.example.com
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 20:51:35 GMT
+<span class="hljs-attribute">Content-Type</span>: application/json
+
+<span class="xquery">{
+  <span class="hljs-string">"type"</span>: <span class="hljs-string">"PaymentResponse"</span>,
+  <span class="hljs-string">"description"</span>: <span class="hljs-string">"Payment to ExampleMerch for widgets"</span>,
+  <span class="hljs-string">"paymentTerms"</span>: {
+    <span class="hljs-string">"paymentMethod"</span>: <span class="hljs-string">"https://payments.example.org/payment-schemes#Visa"</span>,
+    <span class="hljs-string">"status"</span>: <span class="hljs-string">"authorized"</span>,
+    <span class="hljs-string">"token"</span>: <span class="hljs-string">"10025AB"</span>,
+    <span class="hljs-string">"paymentAmount"</span>: {
+      <span class="hljs-string">"amount"</span>: <span class="hljs-string">"2.99"</span>,
+      <span class="hljs-string">"currency"</span>: <span class="hljs-string">"USD"</span>
+    }
+  }
+}</span></pre></div>
+        </li>
+        <li>
+          The <a href="#dfn-payee" class="internalDFN" data-link-type="dfn">payee</a> validates the payment response, sets the appropriate access control for the resource, and re-directs the <a href="#dfn-payer" class="internalDFN" data-link-type="dfn">payer</a> to the resource:
+          <div class="example">
+            <div class="example-title marker"><span>Example 11</span><span style="text-transform: none">: The payee grants access to the initially requested resource</span></div><pre class="hljs http">HTTP/1.1 <span class="hljs-number">302</span> Found
+<span class="hljs-attribute">Date</span>: Tue, 07 Jun 2017 20:51:36 GMT
+<span class="hljs-attribute">Cookie</span>: movieToken=2983fhfa92h3iuhf908723nkjcsdh923; Expires=Tue, 08 Jun 2017 20:51:40 GMT
+<span class="hljs-attribute">Location</span>: /movies/dr-strangelove</pre></div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="security-and-privacy-considerations" typeof="bibo:Chapter" resource="#security-and-privacy-considerations" property="bibo:hasPart">
+      <h3 id="h-security-and-privacy-considerations" resource="#h-security-and-privacy-considerations"><span property="xhv:role" resource="xhv:heading"><span class="secno">4.4 </span>Security and Privacy Considerations</span></h3>
+
+      <div class="issue" id="issue-10">
+        <div class="issue-title marker" aria-level="4" role="heading" id="h-issue10"><span>Issue 10</span></div>
+        <p class="">
+          The Working Group is currently in the early stages of the analysis of the security and privacy implications of this specification. The ongoing analysis can be accessed via the
+          <a href="https://github.com/w3c/webpayments/wiki/Security-and-Privacy-Considerations">
+  Web Payments Working Group Security and Privacy Considerations wiki
+</a>.
+        </p>
+      </div>
+    </section>
+
+  </section>
+
+  <section class="appendix informative" id="acknowledgements" typeof="bibo:Chapter" resource="#acknowledgements" property="bibo:hasPart">
+    <!--OddPage-->
+    <h2 id="h-acknowledgements" resource="#h-acknowledgements"><span property="xhv:role" resource="xhv:heading"><span class="secno">A. </span>Acknowledgements</span></h2>
+    <p><em>This section is non-normative.</em></p>
+
+    <p>
+      The editor would like to thank members of the Web Payments Community Group, Web Payments Interest Group, and Web Payments Working Group for the ideas and discussion that culminated in this specification. In addition, thank you to the to the following individuals, in order of their first name, for their input on this specification: LIST_TBD
+    </p>
+
+  </section>
+
+
+
+  <p role="navigation" id="back-to-top"><a href="#toc"><abbr title="Back to Top">↑</abbr></a></p>
+  <script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script>
+</body>
+</html>
