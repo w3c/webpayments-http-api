@@ -275,13 +275,13 @@ alternate flow where a matching <a>payment app</a> is acquired.
       </ol>
     </li>
     <li>
-If the <a>payment app</a> does not require the payment flow to switch
-to a 3rd party payment processor (e.g., cryptocurrency),
-then the payment response is generated locally and the
-payee's software is notified.
-
-<div class="issue" data-number="7" title="Further clarify the branching options for the payment flow">
-Steps 5, 6, and 7 are intended to provide for various flows envisioned by
+The <a>payment request</a> is forwarded to the selected <a>payment app</a>.
+    </li>
+    <li>
+The <a>payment app</a> handles the <a>payment request</a> and returns a <a>payment response</a>. This could happen
+in a number of ways depending on the payment method:
+        <div class="issue">
+The steps below are intended to provide for various flows envisioned by
 the Web Payments ecosystem. This algorithm is merely a starting point,
 is very much a work in progress, and is not asserted to be correct
 at present:
@@ -335,16 +335,18 @@ The <a>payment mediator</a> forwards the request on via an HTTP POST
 to the <code>paymentRequestService</code> in the
 <code>paymentTerms</code> (note that the <a>payee</a>
 sets this, not the <a>payment app</a>).
-        </li>
-      </ol>
-    </li>
-    <li>
+              </li>
+          </ol>
+            </li>
+
+            <li>
 The payment flow is then transferred to the entity that is going to
 generate the <em>payment acknowledgment</em> (locally installed
 payment app, <a>payee</a>'s payment service provider, or <a>payer</a>'s
 payment service provider).
-    </li>
-    <li>
+            </li>
+-->
+            <li>
 Once the payment app finalizes the data required in the <em>payment response</em>, even if the message is to
 acknowledge that the payment failed, the <em>payment response</em> is generated and the <a>payer</a>'s
 <a>payment mediator</a> is notified via an HTTP 200 success code.
@@ -421,11 +423,6 @@ The payer attempts to access the protected resource again.
 The payee returns the resource to the payee (as the payee has now paid for it).
     </li>
   </ol>
-  <p class="issue">
-Melvin Carvalho has also raised an issue noting that we may not want to use
-402 and the Location header, but rather an additional HTTP header called
-<code>Payment</code> that is compatible with multiple 4xx error conditions.
-  </p>
  </section>
 
  <section>
