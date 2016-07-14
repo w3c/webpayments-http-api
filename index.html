@@ -201,6 +201,9 @@ define it to always come with a payment request response.
 
   <ol class="algorithm">
     <li>
+The <a>payer</a> requests access to a resource via an HTTP request.
+    </li>
+    <li>
 The <a>payee</a>'s web page requests payment by responding with a 402 Payment Required
 response code and a URL encoded in the <code>Location</code> header
 to fetch the <code>request</code> from.
@@ -245,80 +248,82 @@ alternate flow where a matching <a>payment app</a> is acquired.
       </ol>
     </li>
     <li>
-If the <a>payment app</a> does not require the payment flow to switch
-to a 3rd party payment processor (e.g., cryptocurrency),
-then the payment response is generated locally and the
-payee's software is notified.
-
-<div class="issue">
-Steps 5, 6, and 7 are intended to provide for various flows envisioned by
+The <a>payment request</a> is forwarded to the selected <a>payment app</a>.
+    </li>
+    <li>
+The <a>payment app</a> handles the <a>payment request</a> and returns a <a>payment response</a>. This could happen
+in a number of ways depending on the payment method:
+        <div class="issue">
+The steps below are intended to provide for various flows envisioned by
 the Web Payments ecosystem. This algorithm is merely a starting point,
 is very much a work in progress, and is not asserted to be correct
 at present:
-
-<ol style="border-left: 0px;" class="clear-algorithm">
-  <li>
+            <ol style="border-left: 0px;" class="clear-algorithm">
+                <li>
 Let "selectedApp" be the payment app selected by the payment mediator.
-  </li>
-  <li>
+                </li>
+                <li>
 Let "selectedMethod" be the payment method provided by the
 payee and selected by the payer.
-  </li>
-  <li>
+                </li>
+                <li>
 If selectedMethod.paymentRequestService exists, re-direct the user
 there (payee-based PSP).
-  </li>
-  <li>
+                </li>
+                <li>
 If selectedApp.paymentRequestService exists, re-direct the user
 there (payer-based PSP).
-  </li>
-  <li>
+                </li>
+                <li>
 Otherwise, the payment response can be generated locally
 (local PSP - Bitcoin and others).
-  </li>
-</ol>
-
-</div>
-    </li>
-    <li>
-If the app requires the payment flow to switch to a 3rd party
+                </li>
+            </ol>
+        </div>
+        <ol class="algorithm">
+            <li>
+If the <a>payment app</a> does not require the payment flow to switch
+to a 3rd party payment processor (e.g., cryptocurrency),
+then the payment response is generated locally.
+            </li>
+            <li>
+If the app does require the payment flow to switch to a 3rd party
 payer payment processor (e.g., push-payment like a PayPal/Google
 Wallet-like app, ACH, ISO20022 style app):
-      <ol class="algorithm">
-        <li>
+                <ol class="algorithm">
+                <li>
 The <a>payment mediator</a> forwards the <code>request</code>, via
 an HTTP POST to the
 <code>paymentRequestService</code> in the <a>payment app</a> for approval.
-        </li>
-      </ol>
-    </li>
-    <li>
+                </li>
+            </ol>
+            </li>
+            <li>
 If the app requires the payment flow to switch to a 3rd party
 payee payment processor (e.g., pull-payment like non-EMV magstripe credit
 card with embossed PAN and CVV2, or tokenized credit card):
-      <ol class="algorithm">
-        <li>
+                <ol class="algorithm">
+              <li>
 The <a>payment mediator</a> forwards the request on via an HTTP POST
 to the <code>paymentRequestService</code> in the
 <code>paymentTerms</code> (note that the <a>payee</a>
 sets this, not the <a>payment app</a>).
-        </li>
-      </ol>
-    </li>
-    <li>
+              </li>
+          </ol>
+            </li>
+            <li>
 The payment flow is then transferred to the entity that is going to
 generate the <em>payment acknowledgment</em> (locally installed
 payment app, <a>payee</a>'s payment service provider, or <a>payer</a>'s
 payment service provider).
-    </li>
-    <li>
+            </li>
+            <li>
 Once the entity in control of the payment flow finalizes the
 <em>payment response</em>, even if the message is to
 acknowledge that the payment failed, the <em>payment response</em>
 is generated and the <a>payer</a>'s <a>payment mediator</a> is notified via an HTTP 200
 success code.
-
-<div class="issue">
+                <div class="issue">
 Returning an HTTP status code of 200 when a payment fails is controversial.
 
 The current thinking seems to be that 200 is the right thing to do as
@@ -329,27 +334,25 @@ dependent on the payment method used.
 As a thought experiment, what should the HTTP response code be in the
 following cases:
 
-<ol style="border-left: 0px;" class="clear-algorithm">
-  <li>
+                    <ol style="border-left: 0px;" class="clear-algorithm">
+                        <li>
 Funds transfer was initiated and completed. Clearly 200, right?
-  </li>
-  <li>
+                        </li>
+                        <li>
 Funds transfer was initiated, but network delay may cause it to fail at a
 later point in time (ACH, etc.). 102 or 202?
-  </li>
-  <li>
+                        </li>
+                        <li>
 Request for subscription was noted and is setup, but no funds were moved. 200?
-  </li>
-  <li>
+                        </li>
+                        <li>
 Payment submitted to network, but network didn't respond with an auth code. 504?
-  </li>
-  <li>
+                        </li>
+                        <li>
 Cryptocurrency payment was submitted to network but a fork has been detected
 and it is unclear if we're on the winning or losing fork. 102 or 202?
-  </li>
-
-</ol>
-
+                        </li>
+                    </ol>
 There are not enough HTTP status codes to try and enumerate the nuanced
 potential outcomes so the best we can do at present (it seems) is to just report
 on whether or not the payment request was processed successfully or not and
@@ -357,13 +360,41 @@ let the payee determine if the outcome of the transaction was valid from their
 viewpoint. In many nuanced cases, it's up to the payer to decide if it was
 "successful" or not (like waiting on a certain number of acknowledgments
 from a blockchain, for example).
-</div>
+                </div>
+                <p class="issue">
+                    Melvin Carvalho has also raised an issue noting that we may not want to use
+                    402 and the Location header, but rather an additional HTTP header called
+                    <code>Payment</code> that is compatible with multiple 4xx error conditions.
+                </p>
+            </li>
+        </ol>
+    </li>
+    <li>
+The <a>payment response</a> is forwarded to the payee at the URL provided in the <a>payment request</a>.
+    </li>
+    <li>
+The <a>payee</a> MAY contact the payment network to either:
+        <ol class="algorithm">
+            <li>request that a payment is processed using the credentials provided in the payment response.</li>
+            <li>verify that the proof of payment provided in the payment response is valid.</li>
+        </ol>
+    </li>
+    <li>
+The payment network responds to the payment instruction/verification request.
+    </li>
+    <li>
+        <div class="issue" title="Error in diagram">
+The diagram suggests that step 11 is a server push message from the payee to the mediator which breaks the
+client/server model.
+        </div>
+    </li>
+    <li>
+The payer attempts to access the protected resource again.
+    </li>
+    <li>
+The payee returns the resource to the payee (as the payee has now paid for it).
+    </li>
   </ol>
-  <p class="issue">
-Melvin Carvalho has also raised an issue noting that we may not want to use
-402 and the Location header, but rather an additional HTTP header called
-<code>Payment</code> that is compatible with multiple 4xx error conditions.
-  </p>
  </section>
 
  <section>
