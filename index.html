@@ -283,7 +283,7 @@ Otherwise, the payment response can be generated locally
         <ol class="algorithm">
             <li>
 If the <a>payment app</a> does not require the payment flow to switch
-to a 3rd party payment processor (e.g., cryptocurrency),
+to a 3rd party payment processor (e.g., cryptocurrency or stored credentials),
 then the payment response is generated locally.
             </li>
             <li>
@@ -292,12 +292,12 @@ payer payment processor (e.g., push-payment like a PayPal/Google
 Wallet-like app, ACH, ISO20022 style app):
                 <ol class="algorithm">
                 <li>
-The <a>payment mediator</a> forwards the <code>request</code>, via
-an HTTP POST to the
-<code>paymentRequestService</code> in the <a>payment app</a> for approval.
+The <a>payment app</a> communicates with the 3rd party payment processor who processes the payment and returns payment
+method specific response data which is used by the app to generate a response.
                 </li>
             </ol>
             </li>
+<!-- This flow has not been ratified by the WG
             <li>
 If the app requires the payment flow to switch to a 3rd party
 payee payment processor (e.g., pull-payment like non-EMV magstripe credit
@@ -311,18 +311,11 @@ sets this, not the <a>payment app</a>).
               </li>
           </ol>
             </li>
+-->
             <li>
-The payment flow is then transferred to the entity that is going to
-generate the <em>payment acknowledgment</em> (locally installed
-payment app, <a>payee</a>'s payment service provider, or <a>payer</a>'s
-payment service provider).
-            </li>
-            <li>
-Once the entity in control of the payment flow finalizes the
-<em>payment response</em>, even if the message is to
-acknowledge that the payment failed, the <em>payment response</em>
-is generated and the <a>payer</a>'s <a>payment mediator</a> is notified via an HTTP 200
-success code.
+Once the payment app finalizes the data required in the <em>payment response</em>, even if the message is to
+acknowledge that the payment failed, the <em>payment response</em> is generated and the <a>payer</a>'s
+<a>payment mediator</a> is notified via an HTTP 200 success code.
                 <div class="issue">
 Returning an HTTP status code of 200 when a payment fails is controversial.
 
@@ -509,13 +502,13 @@ Content-Length: 873
 {
   "type": "PaymentRequest",
   "description": "Payment for Dr. Strangelove",
-  "paymentTerms": {
-    "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
+  "paymentTerms": [{
+    "paymentMethods": ["https://payments.example.org/payment-schemes#Visa"],
     "paymentAmount": {
       "amount": "2.99",
       "currency": "USD"
     }
-  },
+  }],
   "paymentCompleteService": "https://videos.example.com/services/paymentComplete?transaction=923847298"
 }
         </pre>
@@ -544,21 +537,18 @@ Accept: application/json
 {
   "type": "PaymentRequest",
   "description": "Payment for Dr. Strangelove",
-  "paymentTerms": {
-    "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
+  "paymentTerms": [{
+    "paymentMethods": ["https://payments.example.org/payment-schemes#Visa"],
     "paymentAmount": {
       "amount": "2.99",
       "currency": "USD"
     }
-  },
-  "paymentCompleteService": "https://videos.example.com/services/paymentComplete?transaction=923847298"
+  }]
 }
         </pre>
       </li>
       <li>
-The payment service provider generates a payment response message that
-contains enough information to verify that the transaction has completed in
-success or failure:
+The payment app generates a payment response message:
         <pre class="example" title="The payment response is provided back to the payment mediator from the payment app">
 HTTP/1.1 200 OK
 Date: Tue, 07 Jun 2017 20:51:36 GMT
@@ -567,15 +557,14 @@ Content-Length: 623
 
 {
   "type": "PaymentResponse",
-  "description": "Payment to ExampleMerch for widgets",
-  "paymentTerms": {
-    "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
-    "status": "authorized",
-    "token": "10025AB",
-    "paymentAmount": {
-      "amount": "2.99",
-      "currency": "USD"
-    }
+  "description": "Payment for Dr. Strangelove",
+  "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
+  "details" : {
+    "cardholderName": "John Smith",
+    "cardNumber": "123456789012345",
+    "expiryMonth": "12",
+    "expiryYear": "2020",
+    "cardSecurityCode": "000",
   }
 }
         </pre>
@@ -592,21 +581,20 @@ Content-Type: application/json
 
 {
   "type": "PaymentResponse",
-  "description": "Payment to ExampleMerch for widgets",
-  "paymentTerms": {
-    "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
-    "status": "authorized",
-    "token": "10025AB",
-    "paymentAmount": {
-      "amount": "2.99",
-      "currency": "USD"
-    }
+  "description": "Payment for Dr. Strangelove",
+  "paymentMethod": "https://payments.example.org/payment-schemes#Visa",
+  "details" : {
+    "cardholderName": "John Smith",
+    "cardNumber": "123456789012345",
+    "expiryMonth": "12",
+    "expiryYear": "2020",
+    "cardSecurityCode": "000",
   }
 }
         </pre>
       </li>
       <li>
-The <a>payee</a> validates the payment response, sets the appropriate
+The <a>payee</a> validates the payment response, (if necessary it processes the payment) then sets the appropriate
 access control for the resource, and re-directs the <a>payer</a> to the
 resource:
         <pre class="example" title="The payee grants access to the initially requested resource">
