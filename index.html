@@ -30,6 +30,9 @@ var respecConfig = {
     // if there a publicly available Editor's Draft, this is the link
     edDraftURI:           "https://w3c.github.io/webpayments-http-api/",
 
+    // link to the issue tracker
+    issueBase: "https://github.com/w3c/webpayments-http-api/issues/",
+
     // if this is a LCWD, uncomment and set the end of its review period
     // lcEnd: "2009-08-05",
 
@@ -147,6 +150,11 @@ server and client that is interested in executing payments.
   <section class="normative">
     <h3>Terminology</h3>
 
+    <p class="issue" data-number="3" title="HTTP API terminology needs to be refined">
+The current terminology that is pulled into the HTTP API specification needs
+some simplification and alignment.
+    </p>
+
     <div data-include="//w3c.github.io/webpayments-ig/latest/common/terms.html"
       data-oninclude="restrictReferences">
     </div>
@@ -179,7 +187,7 @@ that was purchased.
     </figcaption>
   </figure>
 
-  <p class="issue">
+  <p class="issue" data-number="4" title="Overview diagram may be misleading">
 The flow above reflects a pull-based tokenized card payment scenario. There
 are other flows, like push-based flows, that we may want to demonstrate in
 this specification as well. Is a tokenized pull-based flow the best exemplary
@@ -191,7 +199,7 @@ flow to use when introducing the reader to the HTTP API?
 <section>
   <h2>Detailed Payment Flow</h2>
 
-  <p class="issue">
+  <p class="issue" data-number="5" title="Should PaymentRequest be returned via HTTP 402 response code?">
 It may be a good idea to return the payment request with the 402 response.
 The concern is that this would be a misrepresentation of the resource. The
 counter-argument is that a client shouldn't interpret a 402 response as
@@ -218,7 +226,7 @@ payment request.
 A <a>payment app</a> is selected by the <a>payment mediator</a> or the <a>payer</a>. The
 process MAY consist of one or more of the following steps:
 
-      <div class="issue">
+      <div class="issue" data-number="6" title="Payment App selection process should be in Payment App spec">
 This payment app selection process should probably be moved out into a separate
 <a>payment mediator</a> specification and referenced from this specification.
       </div>
@@ -250,7 +258,7 @@ to a 3rd party payment processor (e.g., cryptocurrency),
 then the payment response is generated locally and the
 payee's software is notified.
 
-<div class="issue">
+<div class="issue" data-number="7" title="Further clarify the branching options for the payment flow">
 Steps 5, 6, and 7 are intended to provide for various flows envisioned by
 the Web Payments ecosystem. This algorithm is merely a starting point,
 is very much a work in progress, and is not asserted to be correct
@@ -318,7 +326,7 @@ acknowledge that the payment failed, the <em>payment response</em>
 is generated and the <a>payer</a>'s <a>payment mediator</a> is notified via an HTTP 200
 success code.
 
-<div class="issue">
+<div class="issue" data-number="8" title="What is the appropriate HTTP response code for a failed payment?">
 Returning an HTTP status code of 200 when a payment fails is controversial.
 
 The current thinking seems to be that 200 is the right thing to do as
@@ -359,7 +367,7 @@ viewpoint. In many nuanced cases, it's up to the payer to decide if it was
 from a blockchain, for example).
 </div>
   </ol>
-  <p class="issue">
+  <p class="issue" data-number="9" title="Prefer new 'Payment' header instead of 402 response code?">
 Melvin Carvalho has also raised an issue noting that we may not want to use
 402 and the Location header, but rather an additional HTTP header called
 <code>Payment</code> that is compatible with multiple 4xx error conditions.
@@ -382,7 +390,7 @@ Date: Tue, 07 Jun 2017 20:51:35 GMT
 Accept: application/json
 Authorization: Digest username="jdoe", realm="jane@mybank.example.org", ...
         </pre>
-        <div class="issue">
+        <div class="issue" data-number="10" title="What other authentication schemes should be supported for Payment App registration?">
 While digest authentication is used above, more advanced authentication
 schemes may also be employed. For example, the mechanism below uses
 HTTP Signatures and public/private key cryptography to authenticate the client
@@ -442,7 +450,7 @@ Date: Tue, 07 Jun 2017 21:31:36 GMT
 Location: https://videos.example.com/payment-requests/dr-strangelove
         </pre>
 
-<div class="issue">
+        <div class="issue" data-number="11" title="Should getting a PaymentRequest result in an extra round trip?">
 It's currently not clear if having an extra round-trip (steps 2 and 3) is
 beneficial. The alternative is to respond with an HTTP 402 and the payment
 request (step 4)  when the GET for the initial resource is performed. This
@@ -451,13 +459,14 @@ more flexibility wrt. the location of the payment request service. For example,
 having the Location header enables software developers to split media servers
 from payment processing servers. That said, there are techniques to do this
 today without the extra layer of indirection.
-</div>
-<div class="issue">
-    The model described here does not yet take into account "push" payments.
-    While there is nothing in this design that precludes payments pushed from a
-    payer to a payee, explicit support and an example that illustrates this need
-    to be included in the document.
-</div>
+        </div>
+        <div class="issue" data-number="12" title="Push-based payments should be documented in the HTTP API">
+The model described here does not explicitly mention "push" payments even
+though they are supported. While there is nothing in this design that precludes
+payments pushed from a payer to a payee, it may be helpful to point out
+explicit support for the scenario as well as an example that illustrates
+this feature.
+        </div>
       </li>
       <li>
 The <a>payer</a>'s HTTP client accesses the payment request resource:
@@ -591,7 +600,7 @@ Location: /movies/dr-strangelove
   <section>
     <h2>Security and Privacy Considerations</h2>
 
-      <p class="issue">
+      <p class="issue" data-number="13" title="What are the security and privacy implications of the HTTP API?">
 The Working Group is currently in the early stages of the analysis of the
 security and privacy implications of this specification. The ongoing analysis
 can be accessed via the
